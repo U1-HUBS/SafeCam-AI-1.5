@@ -1,0 +1,50 @@
+# Environment Variables
+.env
+.env.local
+.env.*.local
+*.env
+
+# Python & Caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# Node & Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+.npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# CCTV Storage & Video Output (keep directory structure)
+storage/*.db
+storage/*.db-journal
+storage/clips/*.mp4
+storage/thumbnails/*.jpg
+!storage/clips/.gitkeep
+!storage/thumbnails/.gitkeep
+
+# IDEs & System
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
