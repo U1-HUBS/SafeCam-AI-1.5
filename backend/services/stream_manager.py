@@ -7,9 +7,10 @@ from typing import Dict, Optional, Callable
 import cv2
 import numpy as np
 
+from backend.config import resolve_stream_source
 from backend.database import SessionLocal
 from backend.models import Camera, Incident, IncidentEvent, AiPrediction
-from backend.services.ai_service import ViolenceClassifier, TemporalAggregator
+from backend.services.ai_service import ViolenceClassifier, TemporalAggregator, KineticMotionEstimator
 from backend.services.clip_service import save_incident_clip
 
 class CameraStreamWorker:
@@ -50,6 +51,9 @@ class CameraStreamWorker:
         self.latest_prediction: Optional[Dict] = None
         self.status = "OFFLINE"
 
+        # Dedicated isolated kinetic motion estimator for this specific camera
+        self.motion_estimator = KineticMotionEstimator()
+
         # Rolling buffer: deque of (timestamp, frame_bgr)
         self.rolling_buffer: deque = deque()
         self.lock = threading.Lock()
@@ -77,7 +81,8 @@ class CameraStreamWorker:
 
     def _run(self):
         while self.running:
-            cap = cv2.VideoCapture(self.stream_url)
+            source = resolve_stream_source(self.stream_url)
+            cap = cv2.VideoCapture(source)
             if not cap.isOpened():
                 self.status = "OFFLINE"
                 self._update_camera_status("OFFLINE")
@@ -150,7 +155,12 @@ class CameraStreamWorker:
 
     def _process_ai_frame(self, frame: np.ndarray, timestamp: float):
         t0 = time.time()
-        label, category, confidence, is_violent = self.classifier.predict_frame(frame)
+        label, category, confidence, is_violent = self.classifier.predict_frame(
+            frame,
+            timestamp,
+            camera_id=self.camera_id,
+            motion_estimator=self.motion_estimator
+        )
         latency_ms = (time.time() - t0) * 1000.0
 
         self.latest_prediction = {

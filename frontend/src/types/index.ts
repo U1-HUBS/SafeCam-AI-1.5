@@ -80,3 +80,26 @@ export interface SummaryReport {
   by_severity: Record<string, number>;
   by_category: Record<string, number>;
 }
+
+export interface VideoUploadResult {
+  success: boolean;
+  stream_url: string;
+  absolute_path?: string;
+  filename: string;
+  stored_filename?: string;
+  size_bytes: number;
+  fps: number;
+  width: number;
+  height: number;
+  duration_seconds: number;
+  frame_count?: number;
+}
+
+export interface SimulationVideo {
+  name: string;
+  path: string;
+  type: "preset" | "uploaded";
+  filename?: string;
+  size_bytes?: number;
+  uploaded_at?: string;
+}

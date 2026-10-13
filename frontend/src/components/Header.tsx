@@ -1,12 +1,23 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ShieldAlert, Video, History, BarChart3, Plus, Bell, Volume2, VolumeX } from "lucide-react";
+import {
+  ShieldAlert,
+  Video,
+  History,
+  BarChart3,
+  Plus,
+  Bell,
+  Volume2,
+  VolumeX,
+  Upload,
+} from "lucide-react";
 
 interface HeaderProps {
   cameraCount: number;
   activeAlertCount: number;
   onAddCamera?: () => void;
+  onUploadSimulation?: () => void;
   soundEnabled?: boolean;
   onToggleSound?: () => void;
 }
@@ -15,6 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
   cameraCount,
   activeAlertCount,
   onAddCamera,
+  onUploadSimulation,
   soundEnabled = true,
   onToggleSound,
 }) => {
@@ -99,6 +111,18 @@ export const Header: React.FC<HeaderProps> = ({
             <Bell className="w-3.5 h-3.5" />
             <span>Alerts: <strong className={activeAlertCount > 0 ? "text-red-300" : "text-white"}>{activeAlertCount}</strong></span>
           </div>
+
+          {/* Simulate Video Button */}
+          {onUploadSimulation && (
+            <button
+              onClick={onUploadSimulation}
+              className="bg-indigo-600/80 hover:bg-indigo-500 text-white text-xs font-semibold px-3 py-2 rounded-lg flex items-center space-x-1.5 shadow transition border border-indigo-500/30"
+              title="Upload video to simulate a CCTV camera"
+            >
+              <Upload className="w-4 h-4" />
+              <span>Simulate Video</span>
+            </button>
+          )}
 
           {/* Add Camera Button */}
           {onAddCamera && (

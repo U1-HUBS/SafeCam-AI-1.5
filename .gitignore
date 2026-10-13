@@ -37,10 +37,13 @@ yarn-error.log*
 # CCTV Storage & Video Output (keep directory structure)
 storage/*.db
 storage/*.db-journal
-storage/clips/*.mp4
-storage/thumbnails/*.jpg
+storage/clips/*
+storage/thumbnails/*
+storage/uploads/*
 !storage/clips/.gitkeep
 !storage/thumbnails/.gitkeep
+!storage/uploads/.gitkeep
+*.tsbuildinfo
 
 # IDEs & System
 .vscode/

@@ -1,11 +1,19 @@
 import os
+import sys
+from pathlib import Path
+
+# Add project root directory to sys.path so 'backend.*' imports resolve cleanly
+ROOT_DIR = Path(__file__).resolve().parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
 import json
 import time
 import queue
 from flask import Flask, Response, jsonify
 from flask_cors import CORS
 
-from backend.config import SAMPLE_VIDEOS_DIR
+from backend.config import SAMPLE_VIDEOS_DIR, MAX_UPLOAD_SIZE_BYTES
 from backend.database import engine, Base, SessionLocal
 from backend.models import Camera, Incident, IncidentEvent, IncidentReview
 from backend.services.stream_manager import StreamManager
@@ -30,7 +38,22 @@ def create_app():
     Base.metadata.create_all(bind=engine)
 
     app = Flask(__name__)
+    app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_SIZE_BYTES
     CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+    # JSON Error Handlers for API
+    @app.errorhandler(404)
+    def handle_404(e):
+        return jsonify({"error": "Resource not found"}), 404
+
+    @app.errorhandler(413)
+    def handle_413(e):
+        max_mb = MAX_UPLOAD_SIZE_BYTES // (1024 * 1024)
+        return jsonify({"error": f"Uploaded file exceeds maximum limit of {max_mb} MB"}), 413
+
+    @app.errorhandler(500)
+    def handle_500(e):
+        return jsonify({"error": "Internal server error"}), 500
 
     # Stream Manager with event callback
     stream_manager = StreamManager(event_callback=broadcast_event)

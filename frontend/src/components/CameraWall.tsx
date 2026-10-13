@@ -126,8 +126,8 @@ export const CameraWall: React.FC<CameraWallProps> = ({
 
               {/* Live Overlay HUD */}
               <div className="absolute top-2 left-2 flex items-center space-x-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-[10px] text-gray-300 font-mono">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
-                <span>LIVE REC</span>
+                <span className={`w-1.5 h-1.5 rounded-full ${camera.is_simulation ? "bg-purple-400" : "bg-red-500"} animate-pulse`}></span>
+                <span>{camera.is_simulation ? "SIMULATION FEED" : "LIVE REC"}</span>
                 <span>• {camera.sampling_rate} FPS</span>
               </div>
 

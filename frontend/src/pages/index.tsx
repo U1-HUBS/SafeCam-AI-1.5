@@ -16,6 +16,7 @@ export default function SurveillancePage() {
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
   const [cameraModalOpen, setCameraModalOpen] = useState(false);
   const [editingCamera, setEditingCamera] = useState<Camera | null>(null);
+  const [modalInitialMode, setModalInitialMode] = useState<"upload" | "library" | "rtsp">("upload");
 
   // Fetch cameras
   const fetchCameras = useCallback(async () => {
@@ -164,8 +165,14 @@ export default function SurveillancePage() {
         activeAlertCount={incidents.length}
         soundEnabled={soundEnabled}
         onToggleSound={() => setSoundEnabled(!soundEnabled)}
+        onUploadSimulation={() => {
+          setEditingCamera(null);
+          setModalInitialMode("upload");
+          setCameraModalOpen(true);
+        }}
         onAddCamera={() => {
           setEditingCamera(null);
+          setModalInitialMode("upload");
           setCameraModalOpen(true);
         }}
       />
@@ -186,6 +193,7 @@ export default function SurveillancePage() {
             activeAlertCameraIds={activeAlertCameraIds}
             onEditCamera={(cam) => {
               setEditingCamera(cam);
+              setModalInitialMode(cam.is_simulation ? "library" : "rtsp");
               setCameraModalOpen(true);
             }}
             onDeleteCamera={handleDeleteCamera}
@@ -222,6 +230,7 @@ export default function SurveillancePage() {
           setEditingCamera(null);
         }}
         cameraToEdit={editingCamera}
+        initialMode={modalInitialMode}
         onSave={handleSaveCamera}
       />
     </>
