@@ -146,7 +146,14 @@ def get_incident_clip(incident_id):
         if not incident or not incident.clip_path or not os.path.exists(incident.clip_path):
             return jsonify({"error": "Clip not ready or not found"}), 404
 
-        return send_file(incident.clip_path, mimetype="video/mp4")
+        # Guarantee clip is in browser-decodable H.264 format
+        from backend.services.clip_service import ensure_clip_browser_playable
+        ensure_clip_browser_playable(incident.clip_path)
+
+        # conditional=True enables HTTP 206 Partial Content byte-range streaming for HTML5 video players
+        response = send_file(incident.clip_path, mimetype="video/mp4", conditional=True)
+        response.headers["Accept-Ranges"] = "bytes"
+        return response
     finally:
         db.close()
 

@@ -21,6 +21,13 @@ export interface Camera {
     is_violent: boolean;
     timestamp: number;
     latency_ms: number;
+    person_count?: number;
+    persons?: Array<{
+      id: number;
+      box: [number, number, number, number];
+      conf: number;
+      label?: string;
+    }>;
   };
 }
 

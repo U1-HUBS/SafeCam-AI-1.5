@@ -1,7 +1,7 @@
 import time
 import cv2
 import numpy as np
-from flask import Blueprint, Response, jsonify
+from flask import Blueprint, Response, jsonify, request
 
 stream_bp = Blueprint("stream", __name__)
 
@@ -25,11 +25,11 @@ def generate_placeholder_frame(text: str = "NO SIGNAL"):
     _, buffer = cv2.imencode('.jpg', img)
     return buffer.tobytes()
 
-def mjpeg_generator(camera_id: int):
+def mjpeg_generator(camera_id: int, show_labels: bool = True):
     while True:
         frame_bytes = None
         if stream_manager:
-            frame = stream_manager.get_latest_frame(camera_id)
+            frame = stream_manager.get_latest_frame(camera_id, annotated=show_labels)
             if frame is not None:
                 ret, buffer = cv2.imencode('.jpg', frame, [int(cv2.IMWRITE_JPEG_QUALITY), 65])
                 if ret:
@@ -46,10 +46,19 @@ def mjpeg_generator(camera_id: int):
 
 @stream_bp.route("/<int:camera_id>/live")
 def live_mjpeg_stream(camera_id: int):
+    show_labels = request.args.get("labels", "1").lower() not in ["0", "false", "no", "off"]
     return Response(
-        mjpeg_generator(camera_id),
+        mjpeg_generator(camera_id, show_labels=show_labels),
         mimetype='multipart/x-mixed-replace; boundary=frame'
     )
+
+@stream_bp.route("/<int:camera_id>/labels", methods=["POST"])
+def toggle_camera_labels(camera_id: int):
+    data = request.json or {}
+    enabled = bool(data.get("enabled", True))
+    if stream_manager:
+        stream_manager.set_camera_labels(camera_id, enabled)
+    return jsonify({"camera_id": camera_id, "labels_enabled": enabled})
 
 @stream_bp.route("/<int:camera_id>/snapshot")
 def camera_snapshot(camera_id: int):

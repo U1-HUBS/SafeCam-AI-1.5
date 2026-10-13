@@ -28,8 +28,8 @@ class CameraStreamWorker:
         ai_enabled: bool = True,
         sampling_rate: int = 2,
         sensitivity: float = 0.25,
-        pre_buffer_seconds: int = 8,
-        post_buffer_seconds: int = 8,
+        pre_buffer_seconds: int = 4,
+        post_buffer_seconds: int = 4,
         classifier: Optional[ViolenceClassifier] = None,
         event_callback: Optional[Callable[[Dict], None]] = None
     ):
@@ -48,6 +48,11 @@ class CameraStreamWorker:
         self.running = False
         self.thread: Optional[threading.Thread] = None
         self.latest_frame: Optional[np.ndarray] = None
+        self.latest_annotated_frame: Optional[np.ndarray] = None
+        self.latest_persons: List[Dict] = []
+        self.latest_violent_state: bool = False
+        self.latest_ai_label: str = ""
+        self.show_yolo_labels: bool = True
         self.latest_prediction: Optional[Dict] = None
         self.status = "OFFLINE"
 
@@ -163,6 +168,9 @@ class CameraStreamWorker:
         )
         latency_ms = (time.time() - t0) * 1000.0
 
+        persons = self.classifier.get_detected_persons(self.camera_id)
+        self.latest_persons = persons
+
         self.latest_prediction = {
             "label": label,
             "category": category,
@@ -170,7 +178,12 @@ class CameraStreamWorker:
             "is_violent": is_violent,
             "timestamp": timestamp,
             "latency_ms": latency_ms,
+            "person_count": len(persons),
+            "persons": persons
         }
+
+        # Generate annotated frame with YOLO bounding boxes and labels for live monitoring
+        self._render_annotated_frame(frame, persons, is_violent, label)
 
         # Check aggregator
         trigger = self.aggregator.add_prediction(
@@ -184,6 +197,99 @@ class CameraStreamWorker:
         if trigger:
             self._handle_incident_trigger(trigger)
 
+    def render_annotations(self, frame: np.ndarray) -> np.ndarray:
+        if frame is None or frame.size == 0:
+            return frame
+
+        annotated = frame.copy()
+        h, w = annotated.shape[:2]
+
+        with self.lock:
+            persons = list(self.latest_persons)
+            is_violent = self.latest_violent_state
+            label = self.latest_ai_label
+
+        person_count = len(persons)
+        is_solo = (person_count <= 1)
+
+        # Draw YOLO bounding boxes for each detected person
+        for i, p in enumerate(persons):
+            bx, by, bw, bh = p["box"]
+            conf = p.get("conf", 0.90)
+            pid = p.get("id", i + 1)
+
+            # Determine box styling
+            if is_violent:
+                box_color = (40, 40, 230)      # Bright Red (BGR)
+                tag_bg = (30, 30, 200)
+                tag_text = f"Person #{pid} [VIOLENCE] {int(conf * 100)}%"
+            elif is_solo:
+                box_color = (40, 215, 255)     # Amber / Yellow (BGR)
+                tag_bg = (30, 180, 220)
+                tag_text = f"Person #{pid} [SOLO] {int(conf * 100)}%"
+            else:
+                box_color = (80, 220, 80)      # Emerald Green (BGR)
+                tag_bg = (60, 180, 60)
+                tag_text = f"Person #{pid} {int(conf * 100)}%"
+
+            # Crisp high-contrast bounding box
+            cv2.rectangle(annotated, (bx - 1, by - 1), (bx + bw + 1, by + bh + 1), (0, 0, 0), 1)
+            cv2.rectangle(annotated, (bx, by), (bx + bw, by + bh), box_color, 2)
+
+            # Header pill tag
+            (tw, th), _ = cv2.getTextSize(tag_text, cv2.FONT_HERSHEY_SIMPLEX, 0.45, 1)
+            pill_y1 = max(0, by - th - 8)
+            pill_y2 = by
+            cv2.rectangle(annotated, (bx, pill_y1), (bx + tw + 10, pill_y2), (0, 0, 0), -1)
+            cv2.rectangle(annotated, (bx, pill_y1), (bx + tw + 10, pill_y2), tag_bg, 1)
+            cv2.putText(
+                annotated,
+                tag_text,
+                (bx + 5, by - 4),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.45,
+                (255, 255, 255),
+                1,
+                cv2.LINE_AA
+            )
+
+        # Top-Right HUD Badge: Always visible YOLO Status Indicator
+        if person_count == 0:
+            hud_label = "YOLO: SCANNING"
+            hud_sub = "0 PERSONS DETECTED"
+            hud_bg = (100, 100, 100)
+        elif is_solo:
+            hud_label = "YOLO: 1 PERSON"
+            hud_sub = "SOLO (VIOLENCE SUPPRESSED)"
+            hud_bg = (20, 140, 180)
+        elif is_violent:
+            hud_label = f"YOLO: {person_count} PERSONS"
+            hud_sub = "ALTERCATION DETECTED"
+            hud_bg = (30, 30, 200)
+        else:
+            hud_label = f"YOLO: {person_count} PERSONS"
+            hud_sub = "MONITORING ACTIVE"
+            hud_bg = (40, 140, 40)
+
+        badge_w = 210
+        badge_h = 36
+        cv2.rectangle(annotated, (w - badge_w - 10, 8), (w - 10, 8 + badge_h), (20, 20, 20), -1)
+        cv2.rectangle(annotated, (w - badge_w - 10, 8), (w - 10, 8 + badge_h), hud_bg, 1)
+        cv2.putText(annotated, hud_label, (w - badge_w - 2, 22), cv2.FONT_HERSHEY_SIMPLEX, 0.38, (255, 255, 255), 1, cv2.LINE_AA)
+        cv2.putText(annotated, hud_sub, (w - badge_w - 2, 36), cv2.FONT_HERSHEY_SIMPLEX, 0.32, (180, 220, 255), 1, cv2.LINE_AA)
+
+        return annotated
+
+    def _render_annotated_frame(self, frame: np.ndarray, persons: List[Dict], is_violent: bool, label: str):
+        with self.lock:
+            self.latest_persons = persons
+            self.latest_violent_state = is_violent
+            self.latest_ai_label = label
+        annotated = self.render_annotations(frame)
+        with self.lock:
+            self.latest_annotated_frame = annotated
+        return annotated
+
     def _handle_incident_trigger(self, trigger_data: Dict):
         """
         Creates an incident in the database, kicks off pre+post clip capture,
@@ -192,6 +298,19 @@ class CameraStreamWorker:
         db = SessionLocal()
         try:
             public_id = f"INC-{datetime.datetime.utcnow().strftime('%Y%m%d')}-{uuid.uuid4().hex[:6].upper()}"
+            
+            # Instant snapshot capture (<20ms) so operators have immediate preview
+            thumb_path = None
+            if self.latest_frame is not None and self.latest_frame.size > 0:
+                from backend.config import THUMBNAILS_DIR
+                thumb_filename = f"thumb_{public_id}.jpg"
+                candidate_path = str(THUMBNAILS_DIR / thumb_filename)
+                try:
+                    cv2.imwrite(candidate_path, self.latest_frame)
+                    thumb_path = candidate_path
+                except Exception as te:
+                    print(f"[CameraStreamWorker] Warning: Instant thumbnail write failed: {te}")
+
             incident = Incident(
                 public_id=public_id,
                 camera_id=self.camera_id,
@@ -203,7 +322,8 @@ class CameraStreamWorker:
                 started_at=trigger_data["started_at"],
                 detected_at=trigger_data["detected_at"],
                 status="AWAITING_REVIEW",
-                clip_status="PROCESSING"
+                clip_status="PROCESSING",
+                thumbnail_path=thumb_path
             )
             db.add(incident)
             db.commit()
@@ -247,10 +367,11 @@ class CameraStreamWorker:
     def _finalize_incident_clip(self, collector: Dict):
         incident_id = collector["incident_id"]
         frames = collector["frames"]
-        # Run saving asynchronously
+        # Run saving asynchronously with real-time event notification
         threading.Thread(
             target=save_incident_clip,
             args=(incident_id, frames),
+            kwargs={"event_callback": self.event_callback},
             daemon=True
         ).start()
 
@@ -314,11 +435,20 @@ class StreamManager:
         finally:
             db.close()
 
-    def get_latest_frame(self, camera_id: int) -> Optional[np.ndarray]:
+    def get_latest_frame(self, camera_id: int, annotated: bool = True) -> Optional[np.ndarray]:
         worker = self.workers.get(camera_id)
         if worker:
-            return worker.latest_frame
+            frame = worker.latest_frame
+            if frame is not None:
+                if annotated and worker.show_yolo_labels:
+                    return worker.render_annotations(frame)
+                return frame
         return None
+
+    def set_camera_labels(self, camera_id: int, enabled: bool):
+        worker = self.workers.get(camera_id)
+        if worker:
+            worker.show_yolo_labels = enabled
 
     def get_camera_status(self, camera_id: int) -> Dict:
         worker = self.workers.get(camera_id)

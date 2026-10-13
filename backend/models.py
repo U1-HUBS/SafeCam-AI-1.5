@@ -18,8 +18,8 @@ class Camera(Base):
     ai_enabled = Column(Boolean, default=True)
     sampling_rate = Column(Integer, default=2)  # FPS for inference
     sensitivity = Column(Float, default=0.25)   # AI threshold
-    pre_buffer_seconds = Column(Integer, default=8)
-    post_buffer_seconds = Column(Integer, default=8)
+    pre_buffer_seconds = Column(Integer, default=4)
+    post_buffer_seconds = Column(Integer, default=4)
     status = Column(String(20), default="OFFLINE")  # ONLINE, OFFLINE, DEGRADED, DISABLED
     last_seen_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)

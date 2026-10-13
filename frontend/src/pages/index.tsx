@@ -17,6 +17,28 @@ export default function SurveillancePage() {
   const [cameraModalOpen, setCameraModalOpen] = useState(false);
   const [editingCamera, setEditingCamera] = useState<Camera | null>(null);
   const [modalInitialMode, setModalInitialMode] = useState<"upload" | "library" | "rtsp">("upload");
+  const [yoloLabelsEnabled, setYoloLabelsEnabled] = useState(true);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("cctv_yolo_labels");
+      if (saved !== null) {
+        setYoloLabelsEnabled(saved === "1");
+      }
+    } catch (e) {
+      // Ignore localStorage errors
+    }
+  }, []);
+
+  const handleToggleYoloLabels = () => {
+    setYoloLabelsEnabled((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem("cctv_yolo_labels", next ? "1" : "0");
+      } catch (e) {}
+      return next;
+    });
+  };
 
   // Fetch cameras
   const fetchCameras = useCallback(async () => {
@@ -69,6 +91,19 @@ export default function SurveillancePage() {
             }
             fetchIncidents();
             fetchCameras();
+          } else if (data.type === "incident.clip_ready") {
+            setSelectedIncident((prev) => {
+              if (prev && prev.id === data.incident_id) {
+                return {
+                  ...prev,
+                  clip_status: "READY",
+                  clip_url: data.clip_url || `/api/incidents/${data.incident_id}/clip`,
+                  thumbnail_url: data.thumbnail_url || prev.thumbnail_url,
+                };
+              }
+              return prev;
+            });
+            fetchIncidents();
           } else if (data.type === "incident.acknowledged" || data.type === "incident.reviewed") {
             fetchIncidents();
           }
@@ -134,27 +169,35 @@ export default function SurveillancePage() {
 
   // Save (Create or Update) camera
   const handleSaveCamera = async (camData: Partial<Camera>) => {
-    if (editingCamera?.id) {
-      await fetch(`${API_BASE}/cameras/${editingCamera.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(camData),
-      });
-    } else {
-      await fetch(`${API_BASE}/cameras`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(camData),
-      });
+    try {
+      if (editingCamera?.id) {
+        await fetch(`${API_BASE}/cameras/${editingCamera.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(camData),
+        });
+      } else {
+        await fetch(`${API_BASE}/cameras`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(camData),
+        });
+      }
+      fetchCameras();
+    } catch (e) {
+      console.error("Failed to save camera:", e);
     }
-    fetchCameras();
   };
 
   // Delete camera
   const handleDeleteCamera = async (id: number) => {
     if (confirm("Are you sure you want to remove this camera?")) {
-      await fetch(`${API_BASE}/cameras/${id}`, { method: "DELETE" });
-      fetchCameras();
+      try {
+        await fetch(`${API_BASE}/cameras/${id}`, { method: "DELETE" });
+        fetchCameras();
+      } catch (e) {
+        console.error("Failed to delete camera:", e);
+      }
     }
   };
 
@@ -165,6 +208,8 @@ export default function SurveillancePage() {
         activeAlertCount={incidents.length}
         soundEnabled={soundEnabled}
         onToggleSound={() => setSoundEnabled(!soundEnabled)}
+        yoloLabelsEnabled={yoloLabelsEnabled}
+        onToggleYoloLabels={handleToggleYoloLabels}
         onUploadSimulation={() => {
           setEditingCamera(null);
           setModalInitialMode("upload");
@@ -191,6 +236,7 @@ export default function SurveillancePage() {
           <CameraWall
             cameras={cameras}
             activeAlertCameraIds={activeAlertCameraIds}
+            yoloLabelsEnabled={yoloLabelsEnabled}
             onEditCamera={(cam) => {
               setEditingCamera(cam);
               setModalInitialMode(cam.is_simulation ? "library" : "rtsp");

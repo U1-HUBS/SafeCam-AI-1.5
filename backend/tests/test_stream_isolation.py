@@ -69,13 +69,14 @@ def test_single_camera_violence_isolation():
         peaceful_frames[cid] = frame
 
     # Baseline frame for all
-    classifier.predict_frame(cam1_f1, timestamp=t, camera_id=1)
+    b_actors = [(110, 80, 60, 80), (150, 80, 60, 80)]
+    classifier.predict_frame(cam1_f1, timestamp=t, camera_id=1, override_bodies=b_actors)
     for cid in [2, 3, 4]:
         classifier.predict_frame(peaceful_frames[cid], timestamp=t, camera_id=cid)
 
     # Next step: Cam 1 has violent struggle, Cams 2, 3, 4 stay calm
     t += 0.5
-    res1 = classifier.predict_frame(cam1_f2, timestamp=t, camera_id=1)
+    res1 = classifier.predict_frame(cam1_f2, timestamp=t, camera_id=1, override_bodies=b_actors)
     res2 = classifier.predict_frame(peaceful_frames[2], timestamp=t, camera_id=2)
     res3 = classifier.predict_frame(peaceful_frames[3], timestamp=t, camera_id=3)
     res4 = classifier.predict_frame(peaceful_frames[4], timestamp=t, camera_id=4)

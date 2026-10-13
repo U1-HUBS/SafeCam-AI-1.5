@@ -117,3 +117,213 @@ def test_smooth_uniform_walking_not_flagged_as_violent():
     # Smooth non-turbulent walking must not be classified as violence
     assert not is_violent2
     assert conf2 < 0.35
+
+def test_solo_shadowboxing_suppression():
+    classifier = ViolenceClassifier(use_gpu=False)
+    estimator = KineticMotionEstimator()
+    t = time.time()
+
+    # Frame 1: Single person in center of room
+    f1 = np.full((240, 320, 3), 100, dtype=np.uint8)
+    cv2.circle(f1, (160, 100), 20, (30, 200, 30), -1)
+    estimator.update(f1, t)
+
+    # Frame 2: Rapid punch motion (rapid limb displacement by single actor)
+    f2 = np.full((240, 320, 3), 100, dtype=np.uint8)
+    cv2.circle(f2, (160, 100), 20, (30, 200, 30), -1)
+    cv2.line(f2, (160, 100), (220, 90), (255, 255, 255), 8) # extended arm/punch
+
+    label, cat, conf, is_violent = classifier.predict_frame(
+        f2,
+        timestamp=t + 0.1,
+        motion_estimator=estimator,
+        override_bodies=[(130, 60, 60, 140)] # Exactly 1 person
+    )
+
+    assert not is_violent, "Solo shadowboxing must be suppressed"
+    assert cat == "Non-Violent"
+    assert "single person" in label
+
+def test_solo_kicking_suppression():
+    classifier = ViolenceClassifier(use_gpu=False)
+    estimator = KineticMotionEstimator()
+    t = time.time()
+
+    f1 = np.full((240, 320, 3), 100, dtype=np.uint8)
+    cv2.circle(f1, (160, 100), 20, (30, 200, 30), -1)
+    estimator.update(f1, t)
+
+    # Rapid high kick motion by solitary actor
+    f2 = np.full((240, 320, 3), 100, dtype=np.uint8)
+    cv2.circle(f2, (160, 100), 20, (30, 200, 30), -1)
+    cv2.line(f2, (160, 150), (230, 130), (255, 255, 255), 8) # extended leg/kick
+
+    label, cat, conf, is_violent = classifier.predict_frame(
+        f2,
+        timestamp=t + 0.1,
+        motion_estimator=estimator,
+        override_bodies=[(130, 60, 60, 140)] # Exactly 1 person
+    )
+
+    assert not is_violent, "Solo martial arts kicking must be suppressed"
+    assert cat == "Non-Violent"
+
+def test_two_people_non_contact_suppression():
+    classifier = ViolenceClassifier(use_gpu=False)
+    estimator = KineticMotionEstimator()
+    t = time.time()
+
+    # Two people standing at a distance: Person 1 at x=40, Person 2 at x=220
+    b1 = (30, 50, 50, 130)
+    b2 = (210, 50, 50, 130)
+
+    f1 = np.full((240, 320, 3), 100, dtype=np.uint8)
+    cv2.circle(f1, (50, 90), 20, (30, 200, 30), -1)
+    cv2.circle(f1, (230, 90), 20, (200, 30, 30), -1)
+    estimator.update(f1, t)
+
+    # Person 1 shadowboxes/punches in air towards x=100 (stops far before Person 2 at x=210)
+    f2 = np.full((240, 320, 3), 100, dtype=np.uint8)
+    cv2.circle(f2, (50, 90), 20, (30, 200, 30), -1)
+    cv2.circle(f2, (230, 90), 20, (200, 30, 30), -1)
+    cv2.line(f2, (50, 90), (105, 90), (255, 255, 255), 8)
+
+    label, cat, conf, is_violent = classifier.predict_frame(
+        f2,
+        timestamp=t + 0.1,
+        motion_estimator=estimator,
+        override_bodies=[b1, b2]
+    )
+
+    assert not is_violent, "Non-contact shadowboxing between people must be suppressed"
+    assert cat == "Non-Violent"
+    assert "without physical contact" in label
+
+def test_two_people_hand_contact_detected():
+    classifier = ViolenceClassifier(use_gpu=False)
+    estimator = KineticMotionEstimator()
+    t = time.time()
+
+    # Person 1 at x=50, Person 2 close by at x=130
+    b1 = (40, 50, 50, 130)
+    b2 = (120, 50, 50, 130)
+
+    f1 = np.full((240, 320, 3), 100, dtype=np.uint8)
+    cv2.circle(f1, (60, 90), 20, (30, 200, 30), -1)
+    cv2.circle(f1, (140, 90), 20, (200, 30, 30), -1)
+    estimator.update(f1, t)
+
+    # Violent hand strike that connects into Person 2's body box (x reaches 135)
+    f2 = np.full((240, 320, 3), 100, dtype=np.uint8)
+    cv2.circle(f2, (60, 90), 20, (30, 200, 30), -1)
+    cv2.circle(f2, (140, 90), 20, (200, 30, 30), -1)
+    cv2.line(f2, (60, 80), (135, 80), (255, 255, 255), 10) # punch connects
+
+    label, cat, conf, is_violent = classifier.predict_frame(
+        f2,
+        timestamp=t + 0.1,
+        motion_estimator=estimator,
+        override_bodies=[b1, b2]
+    )
+
+    assert is_violent is True, "Physical punch contact with high turbulence must trigger alert"
+    assert cat == "Suspected Fight"
+    assert "punch" in label or "strike" in label or "fight" in label
+
+def test_two_people_foot_contact_detected():
+    classifier = ViolenceClassifier(use_gpu=False)
+    estimator = KineticMotionEstimator()
+    t = time.time()
+
+    # Person 1 at x=50, Person 2 close by at x=130
+    b1 = (40, 50, 50, 130)
+    b2 = (120, 50, 50, 130)
+
+    f1 = np.full((240, 320, 3), 100, dtype=np.uint8)
+    cv2.circle(f1, (60, 90), 20, (30, 200, 30), -1)
+    cv2.circle(f1, (140, 90), 20, (200, 30, 30), -1)
+    estimator.update(f1, t)
+
+    # Violent kick strike that connects into Person 2's body box (foot at y=150, x reaches 135)
+    f2 = np.full((240, 320, 3), 100, dtype=np.uint8)
+    cv2.circle(f2, (60, 90), 20, (30, 200, 30), -1)
+    cv2.circle(f2, (140, 90), 20, (200, 30, 30), -1)
+    cv2.line(f2, (60, 150), (135, 140), (255, 255, 255), 10) # kick connects
+
+    label, cat, conf, is_violent = classifier.predict_frame(
+        f2,
+        timestamp=t + 0.1,
+        motion_estimator=estimator,
+        override_bodies=[b1, b2]
+    )
+
+    assert is_violent is True, "Physical kick contact with high turbulence must trigger alert"
+    assert cat == "Suspected Fight"
+    assert "kick" in label or "strike" in label or "fight" in label
+
+
+def test_yolo_person_detector_loads_and_handles_frames():
+    from backend.services.ai_service import YoloPersonDetector
+    detector = YoloPersonDetector()
+    frame = np.zeros((240, 320, 3), dtype=np.uint8)
+    persons = detector.detect_persons(frame)
+    assert isinstance(persons, list)
+
+
+def test_yolo_merges_overlapping_bounding_boxes():
+    from backend.services.ai_service import YoloPersonDetector
+    detector = YoloPersonDetector()
+
+    # Two heavily overlapping candidate boxes for the same single person
+    box1 = (50, 40, 60, 120)
+    box2 = (55, 45, 55, 115)
+    merged = detector._merge_overlapping_boxes([box1, box2], [0.90, 0.85], iou_thresh=0.35)
+
+    assert len(merged) == 1, "Candidate boxes for the same person must be merged into 1 person"
+    assert merged[0][1] == 0.90
+
+
+def test_camera_worker_renders_annotated_frame_with_yolo_labels():
+    from backend.services.stream_manager import CameraStreamWorker
+    worker = CameraStreamWorker(
+        camera_id=99,
+        stream_url="test.mp4",
+        is_simulation=True,
+        ai_enabled=True
+    )
+    frame = np.full((240, 320, 3), 120, dtype=np.uint8)
+    persons = [{"id": 1, "box": (50, 40, 60, 120), "conf": 0.92, "label": "Person #1"}]
+
+    worker._render_annotated_frame(frame, persons, is_violent=False, label="single person exercising alone")
+    assert worker.latest_annotated_frame is not None
+    assert worker.latest_annotated_frame.shape == frame.shape
+    # Ensure drawing changed pixels from uniform background
+    assert not np.array_equal(worker.latest_annotated_frame, frame)
+
+
+def test_stream_manager_annotated_toggle():
+    from backend.services.stream_manager import StreamManager
+    sm = StreamManager()
+    worker = sm.workers.get(1)
+    # Simulate a worker
+    from backend.services.stream_manager import CameraStreamWorker
+    w = CameraStreamWorker(camera_id=1, stream_url="fake.mp4", is_simulation=True)
+    f = np.full((240, 320, 3), 100, dtype=np.uint8)
+    w.latest_frame = f
+    w.latest_persons = [{"id": 1, "box": (40, 40, 50, 100), "conf": 0.90, "label": "Person #1"}]
+    sm.workers[1] = w
+
+    # With annotated=True, labels and bounding box are rendered
+    ann = sm.get_latest_frame(1, annotated=True)
+    assert not np.array_equal(ann, f)
+
+    # With annotated=False, pristine raw frame is returned
+    raw = sm.get_latest_frame(1, annotated=False)
+    assert np.array_equal(raw, f)
+
+    # With set_camera_labels(1, False), even annotated=True returns raw
+    sm.set_camera_labels(1, False)
+    assert np.array_equal(sm.get_latest_frame(1, annotated=True), f)
+
+
+

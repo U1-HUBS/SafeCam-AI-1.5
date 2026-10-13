@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Camera } from "../types";
-import { Video, AlertTriangle, ShieldCheck, Settings, Trash2, Activity } from "lucide-react";
+import { Video, AlertTriangle, ShieldCheck, Settings, Trash2, Activity, Users, Tag } from "lucide-react";
 
 interface CameraWallProps {
   cameras: Camera[];
   activeAlertCameraIds: Set<number>;
   onEditCamera: (camera: Camera) => void;
   onDeleteCamera: (id: number) => void;
+  yoloLabelsEnabled?: boolean;
 }
 
 export const CameraWall: React.FC<CameraWallProps> = ({
@@ -14,7 +15,16 @@ export const CameraWall: React.FC<CameraWallProps> = ({
   activeAlertCameraIds,
   onEditCamera,
   onDeleteCamera,
+  yoloLabelsEnabled = true,
 }) => {
+  const [cameraOverrides, setCameraOverrides] = useState<Record<number, boolean>>({});
+
+  const toggleCameraLabels = (id: number) => {
+    setCameraOverrides((prev) => {
+      const current = prev[id] !== undefined ? prev[id] : yoloLabelsEnabled;
+      return { ...prev, [id]: !current };
+    });
+  };
   if (cameras.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-16 text-center border border-dashed border-sentinel-border rounded-xl bg-sentinel-card/50">
@@ -33,6 +43,7 @@ export const CameraWall: React.FC<CameraWallProps> = ({
         const isAlerting = activeAlertCameraIds.has(camera.id);
         const isOnline = camera.runtime_status === "ONLINE" || camera.status === "ONLINE";
         const prediction = camera.latest_prediction;
+        const isCameraLabelsOn = cameraOverrides[camera.id] !== undefined ? cameraOverrides[camera.id] : yoloLabelsEnabled;
 
         return (
           <div
@@ -83,6 +94,38 @@ export const CameraWall: React.FC<CameraWallProps> = ({
                   </span>
                 )}
 
+                {/* Person Count Badge */}
+                {camera.ai_enabled && prediction?.person_count !== undefined && (
+                  <span
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wider flex items-center space-x-1 ${
+                      prediction.person_count === 1
+                        ? "bg-amber-500/10 text-amber-400 border border-amber-500/30"
+                        : prediction.person_count > 1
+                        ? "bg-blue-500/10 text-blue-400 border border-blue-500/30"
+                        : "bg-slate-700/30 text-gray-400 border border-slate-700/40"
+                    }`}
+                  >
+                    <Users className="w-3 h-3" />
+                    <span>
+                      {prediction.person_count}{" "}
+                      {prediction.person_count === 1 ? "Person" : "Persons"}
+                    </span>
+                  </span>
+                )}
+
+                {/* Toggle YOLO Labels button */}
+                <button
+                  onClick={() => toggleCameraLabels(camera.id)}
+                  className={`p-1 rounded transition ${
+                    isCameraLabelsOn
+                      ? "text-cyan-300 hover:text-cyan-200 bg-cyan-500/20 border border-cyan-500/40"
+                      : "text-gray-500 hover:text-gray-300 hover:bg-slate-800"
+                  }`}
+                  title={isCameraLabelsOn ? "Turn off YOLO labels for this camera" : "Turn on YOLO labels for this camera"}
+                >
+                  <Tag className="w-3.5 h-3.5" />
+                </button>
+
                 {/* Edit & Delete actions */}
                 <button
                   onClick={() => onEditCamera(camera)}
@@ -106,7 +149,7 @@ export const CameraWall: React.FC<CameraWallProps> = ({
               {isOnline ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={`http://localhost:5000/api/stream/${camera.id}/live`}
+                  src={`http://localhost:5000/api/stream/${camera.id}/live?labels=${isCameraLabelsOn ? 1 : 0}`}
                   alt={camera.name}
                   className="w-full h-full object-cover"
                   onError={(e) => {
@@ -131,13 +174,21 @@ export const CameraWall: React.FC<CameraWallProps> = ({
                 <span>• {camera.sampling_rate} FPS</span>
               </div>
 
-              {/* Confidence HUD (bottom-left) */}
+              {/* Confidence & Person HUD (bottom-left) */}
               {prediction && (
                 <div className="absolute bottom-2 left-2 bg-black/75 backdrop-blur-sm px-2.5 py-1 rounded text-[10px] text-gray-300 border border-white/10 flex items-center space-x-2 font-mono">
                   <Activity className="w-3 h-3 text-blue-400" />
                   <span>Conf: <strong className="text-white">{(prediction.confidence * 100).toFixed(1)}%</strong></span>
                   <span className="text-gray-500">|</span>
                   <span>{prediction.latency_ms.toFixed(0)}ms</span>
+                  {prediction.person_count !== undefined && (
+                    <>
+                      <span className="text-gray-500">|</span>
+                      <span className={prediction.person_count === 1 ? "text-amber-400 font-bold" : "text-blue-400"}>
+                        {prediction.person_count === 1 ? "1 Solo Person" : `${prediction.person_count} Persons`}
+                      </span>
+                    </>
+                  )}
                 </div>
               )}
 

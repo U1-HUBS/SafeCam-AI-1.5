@@ -11,6 +11,7 @@ import {
   Volume2,
   VolumeX,
   Upload,
+  Tag,
 } from "lucide-react";
 
 interface HeaderProps {
@@ -20,6 +21,8 @@ interface HeaderProps {
   onUploadSimulation?: () => void;
   soundEnabled?: boolean;
   onToggleSound?: () => void;
+  yoloLabelsEnabled?: boolean;
+  onToggleYoloLabels?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -29,6 +32,8 @@ export const Header: React.FC<HeaderProps> = ({
   onUploadSimulation,
   soundEnabled = true,
   onToggleSound,
+  yoloLabelsEnabled = true,
+  onToggleYoloLabels,
 }) => {
   const router = useRouter();
 
@@ -91,6 +96,22 @@ export const Header: React.FC<HeaderProps> = ({
             >
               {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
               <span className="hidden sm:inline">{soundEnabled ? "Audio On" : "Muted"}</span>
+            </button>
+          )}
+
+          {/* YOLO Labels Toggle */}
+          {onToggleYoloLabels && (
+            <button
+              onClick={onToggleYoloLabels}
+              title={yoloLabelsEnabled ? "Hide YOLO person labels on live cameras" : "Show YOLO person labels on live cameras"}
+              className={`px-3 py-1.5 rounded-lg border text-xs font-semibold flex items-center space-x-1.5 transition ${
+                yoloLabelsEnabled
+                  ? "bg-cyan-500/20 border-cyan-500/50 text-cyan-300 shadow-sm shadow-cyan-500/20 hover:bg-cyan-500/30"
+                  : "bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-gray-200"
+              }`}
+            >
+              <Tag className="w-3.5 h-3.5" />
+              <span>YOLO Labels: <strong className={yoloLabelsEnabled ? "text-cyan-200 font-bold" : "text-gray-400"}>{yoloLabelsEnabled ? "ON" : "OFF"}</strong></span>
             </button>
           )}
 

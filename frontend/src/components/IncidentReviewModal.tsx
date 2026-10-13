@@ -38,15 +38,45 @@ export const IncidentReviewModal: React.FC<IncidentReviewModalProps> = ({
   const [notes, setNotes] = useState<string>("");
   const [reviewer, setReviewer] = useState<string>("Security Officer");
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [currentIncident, setCurrentIncident] = useState<Incident | null>(incident);
 
-  if (!incident) return null;
+  // Sync internal incident state when prop changes
+  React.useEffect(() => {
+    setCurrentIncident(incident);
+  }, [incident]);
+
+  // Auto-poll if clip is still processing so video starts automatically
+  React.useEffect(() => {
+    if (!currentIncident || currentIncident.clip_status === "READY") return;
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/incidents/${currentIncident.id}`);
+        if (res.ok) {
+          const updated: Incident = await res.json();
+          if (updated.clip_status === "READY") {
+            setCurrentIncident(updated);
+            clearInterval(interval);
+          } else if (updated.thumbnail_url && !currentIncident.thumbnail_url) {
+            setCurrentIncident(updated);
+          }
+        }
+      } catch (err) {
+        // Backend temporarily busy
+      }
+    }, 1200);
+
+    return () => clearInterval(interval);
+  }, [currentIncident]);
+
+  if (!currentIncident) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     try {
       await onSubmitReview({
-        incidentId: incident.id,
+        incidentId: currentIncident.id,
         classification,
         reason: classification.includes("False Positive") ? reason : undefined,
         notes,
@@ -67,9 +97,9 @@ export const IncidentReviewModal: React.FC<IncidentReviewModalProps> = ({
         <div className="px-6 py-4 border-b border-sentinel-border flex items-center justify-between bg-slate-900/80">
           <div>
             <div className="flex items-center space-x-2">
-              <span className="font-mono text-sm text-blue-400 font-bold">{incident.public_id}</span>
+              <span className="font-mono text-sm text-blue-400 font-bold">{currentIncident.public_id}</span>
               <span className="text-gray-500">•</span>
-              <span className="text-xs text-gray-400">{incident.camera_name} ({incident.camera_location})</span>
+              <span className="text-xs text-gray-400">{currentIncident.camera_name} ({currentIncident.camera_location})</span>
             </div>
             <h2 className="text-base font-bold text-white mt-0.5">Incident Review & Classification</h2>
           </div>
@@ -86,19 +116,39 @@ export const IncidentReviewModal: React.FC<IncidentReviewModalProps> = ({
           {/* Left: Video Player & Clip details (7 cols) */}
           <div className="lg:col-span-7 flex flex-col space-y-4">
             <div className="aspect-video bg-black rounded-xl overflow-hidden border border-sentinel-border relative flex items-center justify-center">
-              {incident.clip_status === "READY" ? (
+              {currentIncident.clip_status === "READY" ? (
                 <video
-                  src={`http://localhost:5000/api/incidents/${incident.id}/clip`}
+                  key={`${currentIncident.id}-${currentIncident.clip_status}`}
+                  src={`http://localhost:5000/api/incidents/${currentIncident.id}/clip`}
                   controls
                   autoPlay
+                  muted
+                  playsInline
                   className="w-full h-full object-contain"
                 />
+              ) : currentIncident.thumbnail_url ? (
+                <div className="relative w-full h-full flex items-center justify-center bg-black">
+                  <img
+                    src={`http://localhost:5000${currentIncident.thumbnail_url}`}
+                    alt="Incident Peak Snapshot"
+                    className="w-full h-full object-contain opacity-85"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/95 via-black/70 to-transparent flex items-center justify-between">
+                    <div className="flex items-center space-x-2 text-blue-400">
+                      <Film className="w-4 h-4 animate-spin text-blue-400" />
+                      <span className="text-xs font-semibold text-white">Compiling Full Incident Video Clip (~3s)...</span>
+                    </div>
+                    <span className="text-[10px] bg-blue-500/20 text-blue-300 border border-blue-500/40 px-2 py-0.5 rounded font-mono uppercase tracking-wider">
+                      Instant Snapshot
+                    </span>
+                  </div>
+                </div>
               ) : (
                 <div className="flex flex-col items-center justify-center text-gray-400 text-xs p-6 text-center">
                   <Film className="w-10 h-10 mb-2 opacity-50 text-blue-400 animate-spin" />
                   <span className="font-semibold text-gray-300">Assembling Pre & Post Event Video Clip...</span>
                   <span className="text-[11px] text-gray-500 mt-1">
-                    Clip Status: {incident.clip_status}
+                    Clip Status: {currentIncident.clip_status}
                   </span>
                 </div>
               )}
@@ -108,24 +158,24 @@ export const IncidentReviewModal: React.FC<IncidentReviewModalProps> = ({
             <div className="bg-slate-900/60 border border-sentinel-border rounded-xl p-4 text-xs space-y-2">
               <div className="flex justify-between items-center pb-2 border-b border-sentinel-border/50">
                 <span className="text-gray-400 font-medium">Detection Category:</span>
-                <span className="font-bold text-red-400">{incident.category}</span>
+                <span className="font-bold text-red-400">{currentIncident.category}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-gray-400">Peak Confidence:</span>
-                <span className="font-mono text-white font-semibold">{(incident.peak_confidence * 100).toFixed(1)}%</span>
+                <span className="font-mono text-white font-semibold">{(currentIncident.peak_confidence * 100).toFixed(1)}%</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-gray-400">Average Confidence:</span>
-                <span className="font-mono text-white">{(incident.average_confidence * 100).toFixed(1)}%</span>
+                <span className="font-mono text-white">{(currentIncident.average_confidence * 100).toFixed(1)}%</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-gray-400">Detected Timestamp:</span>
-                <span className="font-mono text-gray-300">{new Date(incident.detected_at).toLocaleString()}</span>
+                <span className="font-mono text-gray-300">{new Date(currentIncident.detected_at).toLocaleString()}</span>
               </div>
-              {incident.raw_ai_label && (
+              {currentIncident.raw_ai_label && (
                 <div className="flex justify-between items-center pt-1 border-t border-sentinel-border/50 text-[11px]">
                   <span className="text-gray-500">Raw AI Label:</span>
-                  <span className="text-gray-400 font-mono truncate max-w-[220px]">{incident.raw_ai_label}</span>
+                  <span className="text-gray-400 font-mono truncate max-w-[220px]">{currentIncident.raw_ai_label}</span>
                 </div>
               )}
             </div>
