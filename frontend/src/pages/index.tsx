@@ -6,10 +6,12 @@ import { IncidentReviewModal } from "../components/IncidentReviewModal";
 import { CameraModal } from "../components/CameraModal";
 import { Camera, Incident } from "../types";
 import { playAlertChime } from "../utils/audio";
+import { useAuth } from "../context/AuthContext";
 
 const API_BASE = "http://localhost:5000/api";
 
 export default function SurveillancePage() {
+  const { authFetch, user } = useAuth();
   const [cameras, setCameras] = useState<Camera[]>([]);
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -43,7 +45,7 @@ export default function SurveillancePage() {
   // Fetch cameras
   const fetchCameras = useCallback(async () => {
     try {
-      const res = await fetch(`${API_BASE}/cameras`);
+      const res = await authFetch(`${API_BASE}/cameras`);
       if (res.ok) {
         const data = await res.json();
         setCameras(data);
@@ -51,12 +53,12 @@ export default function SurveillancePage() {
     } catch (e) {
       // Backend might still be starting
     }
-  }, []);
+  }, [authFetch]);
 
   // Fetch active incidents (awaiting review)
   const fetchIncidents = useCallback(async () => {
     try {
-      const res = await fetch(`${API_BASE}/incidents?status=AWAITING_REVIEW`);
+      const res = await authFetch(`${API_BASE}/incidents?status=AWAITING_REVIEW`);
       if (res.ok) {
         const data = await res.json();
         setIncidents(data);
@@ -64,7 +66,8 @@ export default function SurveillancePage() {
     } catch (e) {
       // Backend offline
     }
-  }, []);
+  }, [authFetch]);
+
 
   // Initial load and periodic polling for camera stats
   useEffect(() => {
@@ -134,10 +137,10 @@ export default function SurveillancePage() {
   // Acknowledge incident
   const handleAcknowledge = async (incidentId: number) => {
     try {
-      await fetch(`${API_BASE}/incidents/${incidentId}/acknowledge`, {
+      await authFetch(`${API_BASE}/incidents/${incidentId}/acknowledge`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ operator: "Operator on Duty" }),
+        body: JSON.stringify({ operator: user?.name || "Security Operator" }),
       });
       fetchIncidents();
     } catch (e) {
@@ -153,14 +156,14 @@ export default function SurveillancePage() {
     notes?: string;
     reviewer?: string;
   }) => {
-    await fetch(`${API_BASE}/incidents/${reviewData.incidentId}/review`, {
+    await authFetch(`${API_BASE}/incidents/${reviewData.incidentId}/review`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         classification: reviewData.classification,
         reason: reviewData.reason,
         notes: reviewData.notes,
-        reviewer: reviewData.reviewer,
+        reviewer: reviewData.reviewer || user?.name || "Operator",
       }),
     });
     fetchIncidents();
@@ -171,13 +174,13 @@ export default function SurveillancePage() {
   const handleSaveCamera = async (camData: Partial<Camera>) => {
     try {
       if (editingCamera?.id) {
-        await fetch(`${API_BASE}/cameras/${editingCamera.id}`, {
+        await authFetch(`${API_BASE}/cameras/${editingCamera.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(camData),
         });
       } else {
-        await fetch(`${API_BASE}/cameras`, {
+        await authFetch(`${API_BASE}/cameras`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(camData),
@@ -193,7 +196,7 @@ export default function SurveillancePage() {
   const handleDeleteCamera = async (id: number) => {
     if (confirm("Are you sure you want to remove this camera?")) {
       try {
-        await fetch(`${API_BASE}/cameras/${id}`, { method: "DELETE" });
+        await authFetch(`${API_BASE}/cameras/${id}`, { method: "DELETE" });
         fetchCameras();
       } catch (e) {
         console.error("Failed to delete camera:", e);

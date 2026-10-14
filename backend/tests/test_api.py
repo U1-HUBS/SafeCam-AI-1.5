@@ -8,7 +8,12 @@ def client():
     app, sm = create_app()
     app.config["TESTING"] = True
     with app.test_client() as client:
+        # Authenticate as admin by default for regression test suite
+        resp = client.post("/api/auth/login", json={"username": "admin", "password": "admin123"})
+        token = resp.get_json()["token"]
+        client.environ_base["HTTP_AUTHORIZATION"] = f"Bearer {token}"
         yield client
+
 
 def test_camera_crud(client):
     # 1. Create camera

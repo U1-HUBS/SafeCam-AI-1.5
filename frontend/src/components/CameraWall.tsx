@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Camera } from "../types";
 import { Video, AlertTriangle, ShieldCheck, Settings, Trash2, Activity, Users, Tag } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 interface CameraWallProps {
   cameras: Camera[];
@@ -17,7 +18,10 @@ export const CameraWall: React.FC<CameraWallProps> = ({
   onDeleteCamera,
   yoloLabelsEnabled = true,
 }) => {
+  const { hasRole } = useAuth();
+  const isAdmin = hasRole(["admin"]);
   const [cameraOverrides, setCameraOverrides] = useState<Record<number, boolean>>({});
+
 
   const toggleCameraLabels = (id: number) => {
     setCameraOverrides((prev) => {
@@ -126,21 +130,25 @@ export const CameraWall: React.FC<CameraWallProps> = ({
                   <Tag className="w-3.5 h-3.5" />
                 </button>
 
-                {/* Edit & Delete actions */}
-                <button
-                  onClick={() => onEditCamera(camera)}
-                  className="p-1 text-gray-400 hover:text-blue-400 hover:bg-slate-800 rounded transition"
-                  title="Configure camera"
-                >
-                  <Settings className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  onClick={() => onDeleteCamera(camera.id)}
-                  className="p-1 text-gray-400 hover:text-red-400 hover:bg-slate-800 rounded transition"
-                  title="Remove camera"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+                {/* Edit & Delete actions (Admin only) */}
+                {isAdmin && (
+                  <>
+                    <button
+                      onClick={() => onEditCamera(camera)}
+                      className="p-1 text-gray-400 hover:text-blue-400 hover:bg-slate-800 rounded transition"
+                      title="Configure camera"
+                    >
+                      <Settings className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => onDeleteCamera(camera.id)}
+                      className="p-1 text-gray-400 hover:text-red-400 hover:bg-slate-800 rounded transition"
+                      title="Remove camera"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 

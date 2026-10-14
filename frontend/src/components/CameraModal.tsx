@@ -13,6 +13,7 @@ import {
   Repeat,
   Sparkles,
 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 interface CameraModalProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ interface CameraModalProps {
   cameraToEdit?: Camera | null;
   initialMode?: "upload" | "library" | "rtsp";
 }
+
 
 export const CameraModal: React.FC<CameraModalProps> = ({
   isOpen,
@@ -56,6 +58,7 @@ export const CameraModal: React.FC<CameraModalProps> = ({
   const [submitting, setSubmitting] = useState(false);
   const [testResult, setTestResult] = useState<string | null>(null);
   const [isTesting, setIsTesting] = useState(false);
+  const { authFetch } = useAuth();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -63,7 +66,7 @@ export const CameraModal: React.FC<CameraModalProps> = ({
   const fetchSimulations = async () => {
     setIsLoadingLibrary(true);
     try {
-      const res = await fetch("http://localhost:5000/api/cameras/simulations");
+      const res = await authFetch("http://localhost:5000/api/cameras/simulations");
       if (res.ok) {
         const data = await res.json();
         setSimulationVideos(data);
@@ -121,10 +124,11 @@ export const CameraModal: React.FC<CameraModalProps> = ({
     formData.append("file", file);
 
     try {
-      const res = await fetch("http://localhost:5000/api/cameras/upload", {
+      const res = await authFetch("http://localhost:5000/api/cameras/upload", {
         method: "POST",
         body: formData,
       });
+
 
       let data: any;
       const contentType = res.headers.get("content-type") || "";
@@ -221,9 +225,10 @@ export const CameraModal: React.FC<CameraModalProps> = ({
     setTestResult("Testing connectivity...");
     try {
       if (cameraToEdit?.id) {
-        const res = await fetch(`http://localhost:5000/api/cameras/${cameraToEdit.id}/test`, {
+        const res = await authFetch(`http://localhost:5000/api/cameras/${cameraToEdit.id}/test`, {
           method: "POST",
         });
+
         const data = await res.json();
         setTestResult(data.connected ? "Success: Stream is Online!" : "Error: Cannot open stream source.");
       } else {

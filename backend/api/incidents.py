@@ -1,8 +1,9 @@
 import os
 import datetime
-from flask import Blueprint, request, jsonify, send_file, Response
+from flask import Blueprint, request, jsonify, send_file, Response, g
 from backend.database import SessionLocal
 from backend.models import Incident, IncidentReview, IncidentEvent
+from backend.auth import login_required, roles_required
 
 incidents_bp = Blueprint("incidents", __name__)
 
@@ -15,6 +16,7 @@ def set_event_callback(cb):
 
 
 @incidents_bp.route("", methods=["GET"])
+@login_required
 def list_incidents():
     db = SessionLocal()
     try:
@@ -41,6 +43,7 @@ def list_incidents():
 
 
 @incidents_bp.route("/<int:incident_id>", methods=["GET"])
+@login_required
 def get_incident(incident_id):
     db = SessionLocal()
     try:
@@ -57,9 +60,11 @@ def get_incident(incident_id):
 
 
 @incidents_bp.route("/<int:incident_id>/acknowledge", methods=["POST"])
+@roles_required("security", "supervisor", "admin")
 def acknowledge_incident(incident_id):
     data = request.json or {}
-    operator_name = data.get("operator", "Security Operator")
+    current_name = getattr(g, "current_user", None).name if getattr(g, "current_user", None) else "Security Operator"
+    operator_name = data.get("operator") or current_name
 
     db = SessionLocal()
     try:
@@ -91,13 +96,15 @@ def acknowledge_incident(incident_id):
 
 
 @incidents_bp.route("/<int:incident_id>/review", methods=["POST"])
+@roles_required("security", "supervisor", "admin")
 def review_incident(incident_id):
     data = request.json or {}
     classification = data.get("classification")
     if not classification:
         return jsonify({"error": "classification is required"}), 400
 
-    reviewer = data.get("reviewer", "Supervisor")
+    current_name = getattr(g, "current_user", None).name if getattr(g, "current_user", None) else "Reviewer"
+    reviewer = data.get("reviewer") or current_name
     reason = data.get("reason", "")
     notes = data.get("notes", "")
 
@@ -139,6 +146,7 @@ def review_incident(incident_id):
 
 
 @incidents_bp.route("/<int:incident_id>/clip", methods=["GET"])
+@login_required
 def get_incident_clip(incident_id):
     db = SessionLocal()
     try:
@@ -159,6 +167,7 @@ def get_incident_clip(incident_id):
 
 
 @incidents_bp.route("/<int:incident_id>/thumbnail", methods=["GET"])
+@login_required
 def get_incident_thumbnail(incident_id):
     db = SessionLocal()
     try:
@@ -169,3 +178,4 @@ def get_incident_thumbnail(incident_id):
         return send_file(incident.thumbnail_path, mimetype="image/jpeg")
     finally:
         db.close()
+

@@ -66,3 +66,8 @@ DEFAULT_MOTION_GATE_THRESHOLD = float(os.getenv("DEFAULT_MOTION_GATE_THRESHOLD",
 REQUIRE_MULTI_PERSON_FOR_VIOLENCE = bool(os.getenv("REQUIRE_MULTI_PERSON_FOR_VIOLENCE", "True") == "True")
 REQUIRE_PHYSICAL_CONTACT_FOR_VIOLENCE = bool(os.getenv("REQUIRE_PHYSICAL_CONTACT_FOR_VIOLENCE", "True") == "True")
 CONTACT_MARGIN_PIXELS = int(os.getenv("CONTACT_MARGIN_PIXELS", "15"))
+
+# Authentication & RBAC Configuration
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "sentinel-jwt-secret-key-2026-cctv")
+JWT_EXPIRY_HOURS = int(os.getenv("JWT_EXPIRY_HOURS", "24"))
+

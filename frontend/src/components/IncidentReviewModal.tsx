@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Incident } from "../types";
 import { X, CheckCircle, AlertOctagon, HelpCircle, Film, Shield, Send } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 interface IncidentReviewModalProps {
   incident: Incident | null;
@@ -31,19 +32,23 @@ export const IncidentReviewModal: React.FC<IncidentReviewModalProps> = ({
   onClose,
   onSubmitReview,
 }) => {
+  const { user, token, authFetch } = useAuth();
   const [classification, setClassification] = useState<
     "Confirmed Violence" | "False Positive / Not Violence" | "Needs Review"
   >("Confirmed Violence");
   const [reason, setReason] = useState<string>(FALSE_POSITIVE_REASONS[0]);
   const [notes, setNotes] = useState<string>("");
-  const [reviewer, setReviewer] = useState<string>("Security Officer");
+  const [reviewer, setReviewer] = useState<string>(user?.name || "Security Officer");
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [currentIncident, setCurrentIncident] = useState<Incident | null>(incident);
 
   // Sync internal incident state when prop changes
   React.useEffect(() => {
     setCurrentIncident(incident);
-  }, [incident]);
+    if (user?.name) {
+      setReviewer(user.name);
+    }
+  }, [incident, user]);
 
   // Auto-poll if clip is still processing so video starts automatically
   React.useEffect(() => {
@@ -51,7 +56,7 @@ export const IncidentReviewModal: React.FC<IncidentReviewModalProps> = ({
 
     const interval = setInterval(async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/incidents/${currentIncident.id}`);
+        const res = await authFetch(`http://localhost:5000/api/incidents/${currentIncident.id}`);
         if (res.ok) {
           const updated: Incident = await res.json();
           if (updated.clip_status === "READY") {
@@ -67,7 +72,8 @@ export const IncidentReviewModal: React.FC<IncidentReviewModalProps> = ({
     }, 1200);
 
     return () => clearInterval(interval);
-  }, [currentIncident]);
+  }, [currentIncident, authFetch]);
+
 
   if (!currentIncident) return null;
 
@@ -119,7 +125,9 @@ export const IncidentReviewModal: React.FC<IncidentReviewModalProps> = ({
               {currentIncident.clip_status === "READY" ? (
                 <video
                   key={`${currentIncident.id}-${currentIncident.clip_status}`}
-                  src={`http://localhost:5000/api/incidents/${currentIncident.id}/clip`}
+                  src={`http://localhost:5000/api/incidents/${currentIncident.id}/clip${
+                    token ? `?token=${encodeURIComponent(token)}` : ""
+                  }`}
                   controls
                   autoPlay
                   muted
@@ -129,7 +137,9 @@ export const IncidentReviewModal: React.FC<IncidentReviewModalProps> = ({
               ) : currentIncident.thumbnail_url ? (
                 <div className="relative w-full h-full flex items-center justify-center bg-black">
                   <img
-                    src={`http://localhost:5000${currentIncident.thumbnail_url}`}
+                    src={`http://localhost:5000${currentIncident.thumbnail_url}${
+                      token ? `?token=${encodeURIComponent(token)}` : ""
+                    }`}
                     alt="Incident Peak Snapshot"
                     className="w-full h-full object-contain opacity-85"
                   />

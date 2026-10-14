@@ -1,10 +1,12 @@
 from flask import Blueprint, jsonify
 from backend.database import SessionLocal
 from backend.models import Incident, IncidentReview, Camera
+from backend.auth import roles_required
 
 reports_bp = Blueprint("reports", __name__)
 
 @reports_bp.route("/summary", methods=["GET"])
+@roles_required("admin", "supervisor")
 def get_summary_report():
     db = SessionLocal()
     try:

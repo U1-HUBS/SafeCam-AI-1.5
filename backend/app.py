@@ -15,12 +15,13 @@ from flask_cors import CORS
 
 from backend.config import SAMPLE_VIDEOS_DIR, MAX_UPLOAD_SIZE_BYTES
 from backend.database import engine, Base, SessionLocal
-from backend.models import Camera, Incident, IncidentEvent, IncidentReview
+from backend.models import Camera, Incident, IncidentEvent, IncidentReview, User
 from backend.services.stream_manager import StreamManager
 from backend.api.cameras import cameras_bp, set_stream_manager as set_cam_sm
 from backend.api.incidents import incidents_bp, set_event_callback as set_inc_cb
 from backend.api.reports import reports_bp
 from backend.api.stream import stream_bp, set_stream_manager as set_str_sm
+from backend.api.auth import auth_bp
 
 # Global event subscribers for SSE
 event_subscribers = []
@@ -62,6 +63,7 @@ def create_app():
     set_inc_cb(broadcast_event)
 
     # Register Blueprints
+    app.register_blueprint(auth_bp, url_prefix="/api/auth")
     app.register_blueprint(cameras_bp, url_prefix="/api/cameras")
     app.register_blueprint(incidents_bp, url_prefix="/api/incidents")
     app.register_blueprint(reports_bp, url_prefix="/api/reports")
@@ -98,11 +100,50 @@ def create_app():
             "subscribers": len(event_subscribers)
         })
 
-    # Auto-seed initial cameras if empty
+    # Auto-seed initial users and cameras if empty
     with app.app_context():
+        _seed_initial_users()
         _seed_initial_cameras(stream_manager)
 
     return app, stream_manager
+
+def _seed_initial_users():
+    db = SessionLocal()
+    try:
+        count = db.query(User).count()
+        if count == 0:
+            admin = User(
+                username="admin",
+                email="admin@sentinel.local",
+                name="System Administrator",
+                role="admin",
+                active=True,
+            )
+            admin.set_password("admin123")
+
+            supervisor = User(
+                username="supervisor",
+                email="supervisor@sentinel.local",
+                name="Shift Supervisor",
+                role="supervisor",
+                active=True,
+            )
+            supervisor.set_password("super123")
+
+            security = User(
+                username="security",
+                email="security@sentinel.local",
+                name="Security Officer",
+                role="security",
+                active=True,
+            )
+            security.set_password("sec123")
+
+            db.add_all([admin, supervisor, security])
+            db.commit()
+    finally:
+        db.close()
+
 
 def _seed_initial_cameras(stream_manager: StreamManager):
     db = SessionLocal()

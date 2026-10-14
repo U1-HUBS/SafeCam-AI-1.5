@@ -3,6 +3,7 @@ from sqlalchemy import (
     Column, Integer, String, Float, Boolean, DateTime, Text, ForeignKey
 )
 from sqlalchemy.orm import relationship
+from werkzeug.security import generate_password_hash, check_password_hash
 from backend.database import Base
 
 class Camera(Base):
@@ -176,3 +177,36 @@ class AiPrediction(Base):
             "confidence": round(self.confidence, 3),
             "processing_latency_ms": round(self.processing_latency_ms, 1),
         }
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String(50), unique=True, index=True, nullable=False)
+    email = Column(String(120), unique=True, index=True, nullable=False)
+    password_hash = Column(String(255), nullable=False)
+    name = Column(String(100), nullable=False)
+    role = Column(String(20), nullable=False, default="security")  # admin, supervisor, security
+    active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
+
+    def set_password(self, password: str):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password: str) -> bool:
+        return check_password_hash(self.password_hash, password)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+            "name": self.name,
+            "role": self.role,
+            "active": self.active,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+        }
+

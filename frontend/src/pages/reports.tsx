@@ -2,10 +2,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Header } from "../components/Header";
 import { SummaryReport, Camera } from "../types";
 import { AlertCircle, CheckCircle, ShieldAlert, TrendingDown, Camera as CameraIcon } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const API_BASE = "http://localhost:5000/api";
 
 export default function ReportsPage() {
+  const { authFetch } = useAuth();
   const [report, setReport] = useState<SummaryReport | null>(null);
   const [cameras, setCameras] = useState<Camera[]>([]);
   const [loading, setLoading] = useState(true);
@@ -13,8 +15,8 @@ export default function ReportsPage() {
   const fetchReports = useCallback(async () => {
     try {
       const [repRes, camRes] = await Promise.all([
-        fetch(`${API_BASE}/reports/summary`),
-        fetch(`${API_BASE}/cameras`),
+        authFetch(`${API_BASE}/reports/summary`),
+        authFetch(`${API_BASE}/cameras`),
       ]);
       if (repRes.ok) setReport(await repRes.json());
       if (camRes.ok) setCameras(await camRes.json());
@@ -23,7 +25,8 @@ export default function ReportsPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [authFetch]);
+
 
   useEffect(() => {
     fetchReports();

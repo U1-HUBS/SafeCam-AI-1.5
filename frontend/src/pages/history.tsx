@@ -3,10 +3,12 @@ import { Header } from "../components/Header";
 import { IncidentReviewModal } from "../components/IncidentReviewModal";
 import { Incident, Camera } from "../types";
 import { Search, Filter, PlayCircle, ShieldCheck, AlertOctagon, HelpCircle, Film } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const API_BASE = "http://localhost:5000/api";
 
 export default function HistoryPage() {
+  const { authFetch, user } = useAuth();
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [cameras, setCameras] = useState<Camera[]>([]);
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
@@ -20,15 +22,15 @@ export default function HistoryPage() {
   const fetchData = useCallback(async () => {
     try {
       const [incRes, camRes] = await Promise.all([
-        fetch(`${API_BASE}/incidents`),
-        fetch(`${API_BASE}/cameras`),
+        authFetch(`${API_BASE}/incidents`),
+        authFetch(`${API_BASE}/cameras`),
       ]);
       if (incRes.ok) setIncidents(await incRes.json());
       if (camRes.ok) setCameras(await camRes.json());
     } catch (e) {
       console.error("Failed to fetch history:", e);
     }
-  }, []);
+  }, [authFetch]);
 
   useEffect(() => {
     fetchData();
@@ -56,13 +58,17 @@ export default function HistoryPage() {
     notes?: string;
     reviewer?: string;
   }) => {
-    await fetch(`${API_BASE}/incidents/${reviewData.incidentId}/review`, {
+    await authFetch(`${API_BASE}/incidents/${reviewData.incidentId}/review`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(reviewData),
+      body: JSON.stringify({
+        ...reviewData,
+        reviewer: reviewData.reviewer || user?.name || "Reviewer",
+      }),
     });
     fetchData();
   };
+
 
   return (
     <>

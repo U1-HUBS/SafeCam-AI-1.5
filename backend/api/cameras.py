@@ -17,6 +17,7 @@ from backend.config import (
 )
 from backend.database import SessionLocal
 from backend.models import Camera
+from backend.auth import login_required, roles_required
 
 cameras_bp = Blueprint("cameras", __name__)
 
@@ -29,6 +30,7 @@ def set_stream_manager(sm):
 
 
 @cameras_bp.route("", methods=["GET"])
+@login_required
 def list_cameras():
     db = SessionLocal()
     try:
@@ -47,6 +49,7 @@ def list_cameras():
 
 
 @cameras_bp.route("", methods=["POST"])
+@roles_required("admin")
 def create_camera():
     data = request.json or {}
     if not data.get("name") or not data.get("stream_url"):
@@ -80,6 +83,7 @@ def create_camera():
 
 
 @cameras_bp.route("/<int:camera_id>", methods=["GET"])
+@login_required
 def get_camera(camera_id):
     db = SessionLocal()
     try:
@@ -97,6 +101,7 @@ def get_camera(camera_id):
 
 
 @cameras_bp.route("/<int:camera_id>", methods=["PUT"])
+@roles_required("admin")
 def update_camera(camera_id):
     data = request.json or {}
     db = SessionLocal()
@@ -126,6 +131,7 @@ def update_camera(camera_id):
 
 
 @cameras_bp.route("/<int:camera_id>", methods=["DELETE"])
+@roles_required("admin")
 def delete_camera(camera_id):
     db = SessionLocal()
     try:
@@ -144,6 +150,7 @@ def delete_camera(camera_id):
 
 
 @cameras_bp.route("/upload", methods=["POST"])
+@roles_required("admin")
 def upload_simulation_video():
     """
     Accepts a video file upload for CCTV camera simulation, validates it using OpenCV,
@@ -216,6 +223,7 @@ def upload_simulation_video():
 
 
 @cameras_bp.route("/simulations", methods=["GET"])
+@login_required
 def list_simulations():
     """
     Returns available simulation videos from presets and user uploads.
@@ -264,6 +272,7 @@ def list_simulations():
 
 
 @cameras_bp.route("/<int:camera_id>/test", methods=["POST"])
+@roles_required("admin", "supervisor")
 def test_camera(camera_id):
     db = SessionLocal()
     try:

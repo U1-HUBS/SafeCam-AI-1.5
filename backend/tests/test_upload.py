@@ -14,7 +14,12 @@ def client():
     app, sm = create_app()
     app.config["TESTING"] = True
     with app.test_client() as client:
+        # Authenticate as admin by default for upload tests
+        resp = client.post("/api/auth/login", json={"username": "admin", "password": "admin123"})
+        token = resp.get_json()["token"]
+        client.environ_base["HTTP_AUTHORIZATION"] = f"Bearer {token}"
         yield client
+
 
 def generate_temp_mp4(frames_count: int = 15, fps: int = 20, width: int = 320, height: int = 240) -> bytes:
     """Helper to generate an in-memory valid MP4 video."""
