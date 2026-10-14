@@ -1,0 +1,10 @@
+{
+  "model_name": "violence_head_v20261014_142132.pt",
+  "version": "v1014.1421",
+  "is_trained": true,
+  "trained_at": "2026-10-14T14:21:32.302001+00:00",
+  "accuracy": 54.5,
+  "samples_used": 2,
+  "total_frames": 22,
+  "path": "C:\\Users\\kim\\Work\\bully-detect\\storage\\models\\violence_head_v20261014_142132.pt"
+}

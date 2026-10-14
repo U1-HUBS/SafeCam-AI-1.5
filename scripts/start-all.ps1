@@ -1,6 +1,6 @@
-# CCTV Sentinel - Local Development Startup Script
+# Safecam AI - Local Development Startup Script
 Write-Host "=============================================" -ForegroundColor Cyan
-Write-Host " Starting CCTV Sentinel (Backend + Frontend)" -ForegroundColor Cyan
+Write-Host " Starting Safecam AI (Backend + Frontend)   " -ForegroundColor Cyan
 Write-Host "=============================================" -ForegroundColor Cyan
 
 # 1. Ensure sample videos exist
@@ -18,7 +18,7 @@ Write-Host "[3/3] Launching Next.js Frontend on http://localhost:3000..." -Foreg
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$PSScriptRoot\..\frontend'; npm run dev"
 
 Write-Host ""
-Write-Host "CCTV Sentinel is running!" -ForegroundColor Cyan
+Write-Host "Safecam AI is running!" -ForegroundColor Cyan
 Write-Host "- Dashboard: http://localhost:3000" -ForegroundColor White
 Write-Host "- Backend API: http://localhost:5000" -ForegroundColor White
 Write-Host "=============================================" -ForegroundColor Cyan

@@ -1,0 +1,2360 @@
+{
+  "dataset_id": "dataset_20261014_131732",
+  "created_at": "2026-10-14T13:17:32.269370+00:00",
+  "total_incidents": 26,
+  "total_frames": 336,
+  "items": [
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f0.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f1.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f2.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f3.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f4.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f5.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f6.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f7.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f8.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f9.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f10.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f11.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f12.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f13.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f14.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f15.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f16.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f17.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f18.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f19.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f20.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f21.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f22.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f23.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 22,
+      "filename": "inc_22_f24.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f0.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f1.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f2.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f3.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f4.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f5.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f6.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f7.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f8.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f9.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f10.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f11.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f12.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f13.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f14.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f15.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f16.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f17.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f18.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 20,
+      "filename": "inc_20_f19.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 18,
+      "filename": "inc_18_f0.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 18,
+      "filename": "inc_18_f1.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 18,
+      "filename": "inc_18_f2.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 18,
+      "filename": "inc_18_f3.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 18,
+      "filename": "inc_18_f4.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 18,
+      "filename": "inc_18_f5.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 18,
+      "filename": "inc_18_f6.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 18,
+      "filename": "inc_18_f7.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 18,
+      "filename": "inc_18_f8.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 18,
+      "filename": "inc_18_f9.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 18,
+      "filename": "inc_18_f10.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 18,
+      "filename": "inc_18_f11.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f0.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f1.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f2.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f3.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f4.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f5.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f6.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f7.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f8.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f9.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f10.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f11.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f12.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f13.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f14.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f15.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f16.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f17.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f18.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 17,
+      "filename": "inc_17_f19.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f0.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f1.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f2.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f3.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f4.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f5.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f6.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f7.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f8.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f9.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f10.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f11.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f12.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f13.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f14.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f15.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f16.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f17.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 15,
+      "filename": "inc_15_f18.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f0.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f1.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f2.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f3.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f4.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f5.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f6.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f7.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f8.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f9.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f10.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f11.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f12.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f13.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f14.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f15.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 13,
+      "filename": "inc_13_f16.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f0.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f1.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f2.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f3.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f4.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f5.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f6.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f7.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f8.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f9.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f10.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f11.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f12.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f13.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f14.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f15.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f16.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 10,
+      "filename": "inc_10_f17.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f0.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f1.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f2.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f3.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f4.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f5.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f6.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f7.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f8.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f9.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f10.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f11.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f12.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f13.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f14.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f15.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f16.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 8,
+      "filename": "inc_8_f17.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f0.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f1.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f2.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f3.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f4.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f5.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f6.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f7.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f8.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f9.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f10.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f11.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f12.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f13.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f14.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f15.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f16.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f17.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f18.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 4,
+      "filename": "inc_4_f19.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 3,
+      "filename": "inc_3_f0.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 3,
+      "filename": "inc_3_f1.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 3,
+      "filename": "inc_3_f2.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 3,
+      "filename": "inc_3_f3.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 3,
+      "filename": "inc_3_f4.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 3,
+      "filename": "inc_3_f5.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 3,
+      "filename": "inc_3_f6.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 3,
+      "filename": "inc_3_f7.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 3,
+      "filename": "inc_3_f8.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 3,
+      "filename": "inc_3_f9.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f0.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f1.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f2.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f3.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f4.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f5.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f6.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f7.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f8.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f9.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f10.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f11.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f12.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f13.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f14.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f15.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f16.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f17.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f18.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f19.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 23,
+      "filename": "inc_23_f20.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Non-violent scene misclassified"
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f0.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f1.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f2.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f3.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f4.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f5.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f6.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f7.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f8.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f9.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f10.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f11.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f12.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f13.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f14.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f15.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f16.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f17.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f18.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f19.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f20.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f21.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f22.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f23.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f24.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f25.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 25,
+      "filename": "inc_25_f26.jpg",
+      "split": "train",
+      "label": 1,
+      "reason": ""
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f0.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f1.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f2.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f3.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f4.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f5.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f6.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f7.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f8.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f9.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f10.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f11.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f12.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f13.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f14.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f15.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f16.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f17.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f18.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f19.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f20.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f21.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f22.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f23.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f24.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f25.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f26.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f27.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f28.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 38,
+      "filename": "inc_38_f29.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 27,
+      "filename": "inc_27_f0.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 27,
+      "filename": "inc_27_f1.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 27,
+      "filename": "inc_27_f2.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 27,
+      "filename": "inc_27_f3.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 27,
+      "filename": "inc_27_f4.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 27,
+      "filename": "inc_27_f5.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 27,
+      "filename": "inc_27_f6.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 27,
+      "filename": "inc_27_f7.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 27,
+      "filename": "inc_27_f8.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 27,
+      "filename": "inc_27_f9.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 27,
+      "filename": "inc_27_f10.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 27,
+      "filename": "inc_27_f11.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 27,
+      "filename": "inc_27_f12.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f0.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f1.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f2.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f3.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f4.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f5.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f6.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f7.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f8.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f9.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f10.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f11.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f12.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f13.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f14.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f15.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f16.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f17.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f18.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f19.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f20.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f21.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f22.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f23.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f24.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f25.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f26.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f27.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f28.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 26,
+      "filename": "inc_26_f29.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f0.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f1.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f2.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f3.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f4.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f5.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f6.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f7.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f8.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f9.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f10.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f11.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f12.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f13.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f14.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f15.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f16.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f17.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f18.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 24,
+      "filename": "inc_24_f19.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 36,
+      "filename": "inc_36_f0.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 36,
+      "filename": "inc_36_f1.jpg",
+      "split": "val",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 35,
+      "filename": "inc_35_f0.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 35,
+      "filename": "inc_35_f1.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 35,
+      "filename": "inc_35_f2.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 35,
+      "filename": "inc_35_f3.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 35,
+      "filename": "inc_35_f4.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 35,
+      "filename": "inc_35_f5.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 30,
+      "filename": "inc_30_f0.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 30,
+      "filename": "inc_30_f1.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 29,
+      "filename": "inc_29_f0.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 29,
+      "filename": "inc_29_f1.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 29,
+      "filename": "inc_29_f2.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 29,
+      "filename": "inc_29_f3.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 29,
+      "filename": "inc_29_f4.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    },
+    {
+      "incident_id": 29,
+      "filename": "inc_29_f5.jpg",
+      "split": "train",
+      "label": 0,
+      "reason": "Sports / playful physical activity"
+    }
+  ]
+}

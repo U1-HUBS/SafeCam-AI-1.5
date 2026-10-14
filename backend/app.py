@@ -22,6 +22,8 @@ from backend.api.incidents import incidents_bp, set_event_callback as set_inc_cb
 from backend.api.reports import reports_bp
 from backend.api.stream import stream_bp, set_stream_manager as set_str_sm
 from backend.api.auth import auth_bp
+from backend.api.training import training_bp
+from backend.services.training_service import trainer_service
 
 # Global event subscribers for SSE
 event_subscribers = []
@@ -40,7 +42,12 @@ def create_app():
 
     app = Flask(__name__)
     app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_SIZE_BYTES
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    CORS(
+        app,
+        resources={r"/api/*": {"origins": "*"}},
+        allow_headers=["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+        methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    )
 
     # JSON Error Handlers for API
     @app.errorhandler(404)
@@ -62,12 +69,17 @@ def create_app():
     set_str_sm(stream_manager)
     set_inc_cb(broadcast_event)
 
+    # Register trainer hot-reload callback to reload classifier weights seamlessly
+    if hasattr(stream_manager, "classifier") and stream_manager.classifier:
+        trainer_service.register_on_complete(stream_manager.classifier.load_trained_head)
+
     # Register Blueprints
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
     app.register_blueprint(cameras_bp, url_prefix="/api/cameras")
     app.register_blueprint(incidents_bp, url_prefix="/api/incidents")
     app.register_blueprint(reports_bp, url_prefix="/api/reports")
     app.register_blueprint(stream_bp, url_prefix="/api/stream")
+    app.register_blueprint(training_bp, url_prefix="/api/training")
 
     # Real-Time SSE Endpoint
     @app.route("/api/events")

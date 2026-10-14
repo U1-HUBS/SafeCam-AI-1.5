@@ -195,7 +195,7 @@ export default function UsersManagementPage() {
   return (
     <>
       <Head>
-        <title>User Management & RBAC — CCTV Sentinel</title>
+        <title>User Management & RBAC — Safecam AI</title>
       </Head>
 
       <Header cameraCount={0} activeAlertCount={0} />
@@ -209,7 +209,7 @@ export default function UsersManagementPage() {
               <span>User & Role-Based Access Control</span>
             </h1>
             <p className="text-xs text-gray-400 mt-0.5">
-              Manage operators, supervisors, and administrative credentials for CCTV Sentinel.
+              Manage operators, supervisors, and administrative credentials for Safecam AI.
             </p>
           </div>
 

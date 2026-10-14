@@ -82,8 +82,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <Head>
-        <title>CCTV Sentinel — AI Violence Monitoring</title>
-        <meta name="description" content="AI CCTV Central Monitoring & Violence Incident Management System" />
+        <title>Safecam AI — AI Violence Monitoring</title>
+        <meta name="description" content="Safecam AI Central Monitoring & Violence Incident Management System" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

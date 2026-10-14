@@ -572,8 +572,47 @@ class ViolenceClassifier:
         self.limb_detector = LimbContactDetector()
         self.camera_persons: Dict[int, List[Dict]] = {}
         self.last_detected_persons: List[Dict] = []
+        self.custom_head = None
+        self.custom_head_path = None
         self._lock = threading.Lock()
         self._init_clip()
+        self.load_trained_head()
+
+    def load_trained_head(self, model_path: Optional[str] = None) -> bool:
+        """
+        Loads the latest trained SafeCamViolenceHead weights from disk into memory.
+        Enables hot-reloading without server reboot.
+        """
+        try:
+            import torch
+            from backend.config import MODELS_DIR
+            from backend.services.training_service import SafeCamViolenceHead
+
+            target_path = None
+            if model_path and os.path.exists(model_path):
+                target_path = Path(model_path)
+            else:
+                pts = sorted(MODELS_DIR.glob("violence_head_v*.pt"), key=lambda p: p.stat().st_mtime, reverse=True)
+                if pts:
+                    target_path = pts[0]
+
+            if not target_path or not target_path.exists():
+                return False
+
+            head = SafeCamViolenceHead(in_features=512)
+            state_dict = torch.load(str(target_path), map_location=self.device)
+            head.load_state_dict(state_dict)
+            head.to(self.device)
+            head.eval()
+
+            with self._lock:
+                self.custom_head = head
+                self.custom_head_path = str(target_path)
+            print(f"[ViolenceClassifier] Successfully hot-reloaded custom head: {target_path.name}")
+            return True
+        except Exception as e:
+            print(f"[ViolenceClassifier] Notice loading custom head: {e}")
+            return False
 
     def get_detected_persons(self, camera_id: Optional[int] = None) -> List[Dict]:
         """
@@ -736,6 +775,15 @@ class ViolenceClassifier:
                     pos_score = torch.exp(max_violent_sim / temp)
                     neg_score = torch.exp(max_normal_sim / temp)
                     raw_visual_prob = float((pos_score / (pos_score + neg_score)).item())
+
+                    # Fuse SafeCam custom trained head probability if available
+                    if self.custom_head is not None:
+                        try:
+                            head_input = image_features.float()
+                            head_prob = float(self.custom_head(head_input).item())
+                            raw_visual_prob = (0.50 * raw_visual_prob) + (0.50 * head_prob)
+                        except Exception:
+                            pass
 
                     top_violent_label = ALL_LABELS[violent_idx.item()]
                     top_category = LABEL_TO_CATEGORY.get(top_violent_label, "Suspected Fight")

@@ -90,7 +90,7 @@ export default function LoginPage() {
             <div className="inline-flex items-center justify-center p-3.5 bg-red-500/10 border border-red-500/30 rounded-2xl shadow-lg shadow-red-500/10">
               <ShieldAlert className="w-9 h-9 text-red-500" />
             </div>
-            <h1 className="text-2xl font-bold tracking-wider text-white">CCTV SENTINEL</h1>
+            <h1 className="text-2xl font-bold tracking-wider text-white">SAFECAM AI</h1>
             <p className="text-xs text-gray-400">
               AI Central Monitoring & Violence Incident Management System
             </p>
@@ -260,7 +260,7 @@ export default function LoginPage() {
 
           {/* Footer Info */}
           <div className="text-center text-[11px] text-gray-400">
-            CCTV Sentinel v2.0 &bull; Edge AI Violence Detection &bull; Multi-Tier RBAC
+            Safecam AI v2.0 &bull; Edge AI Violence Detection &bull; Multi-Tier RBAC
           </div>
         </div>
       </div>

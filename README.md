@@ -1,6 +1,6 @@
-# CCTV Sentinel — AI CCTV Central Monitoring & Violence Incident Management System
+# Safecam AI — AI CCTV Central Monitoring & Violence Incident Management System
 
-**CCTV Sentinel** is a centralized monitoring system for multiple CCTV cameras that uses an AI violence-detection engine to identify suspected violence (fighting or physical altercations).
+**Safecam AI** is a centralized monitoring system for multiple CCTV cameras that uses an AI violence-detection engine to identify suspected violence (fighting or physical altercations).
 
 ---
 

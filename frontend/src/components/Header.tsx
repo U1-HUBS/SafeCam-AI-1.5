@@ -92,7 +92,7 @@ export const Header: React.FC<HeaderProps> = ({
               <ShieldAlert className="w-6 h-6 text-red-500" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-white tracking-wide">CCTV SENTINEL</h1>
+              <h1 className="text-lg font-bold text-white tracking-wide">SAFECAM AI</h1>
               <p className="text-xs text-gray-400">AI Central Monitoring & Violence Detection</p>
             </div>
           </Link>
@@ -229,7 +229,7 @@ export const Header: React.FC<HeaderProps> = ({
 
               <button
                 onClick={logout}
-                title="Log out of Sentinel"
+                title="Log out of Safecam AI"
                 className="p-1.5 rounded-lg bg-gray-800/80 hover:bg-red-500/20 hover:text-red-400 border border-gray-700 text-gray-400 transition"
               >
                 <LogOut className="w-4 h-4" />

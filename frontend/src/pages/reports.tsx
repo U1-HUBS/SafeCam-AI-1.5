@@ -3,6 +3,7 @@ import { Header } from "../components/Header";
 import { SummaryReport, Camera } from "../types";
 import { AlertCircle, CheckCircle, ShieldAlert, TrendingDown, Camera as CameraIcon } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { ModelTrainingPanel } from "../components/ModelTrainingPanel";
 
 const API_BASE = "http://localhost:5000/api";
 
@@ -78,6 +79,9 @@ export default function ReportsPage() {
             </div>
           </div>
         )}
+
+        {/* Safecam AI Active Learning & Model Fine-Tuning Panel */}
+        <ModelTrainingPanel />
 
         {/* Charts and Visual Breakdown */}
         {report && (

@@ -11,12 +11,17 @@ THUMBNAILS_DIR = STORAGE_DIR / "thumbnails"
 SAMPLE_VIDEOS_DIR = BASE_DIR / "sample_videos"
 UPLOADS_DIR = STORAGE_DIR / "uploads"
 
+MODELS_DIR = STORAGE_DIR / "models"
+DATASETS_DIR = STORAGE_DIR / "datasets"
+
 # Ensure storage directories exist
 STORAGE_DIR.mkdir(parents=True, exist_ok=True)
 CLIPS_DIR.mkdir(parents=True, exist_ok=True)
 THUMBNAILS_DIR.mkdir(parents=True, exist_ok=True)
 SAMPLE_VIDEOS_DIR.mkdir(parents=True, exist_ok=True)
 UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
+MODELS_DIR.mkdir(parents=True, exist_ok=True)
+DATASETS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Upload constraints
 ALLOWED_VIDEO_EXTENSIONS = {".mp4", ".avi", ".mov", ".mkv", ".webm", ".m4v"}
