@@ -11,7 +11,8 @@ if (!(Test-Path "sample_videos\sample_hallway.mp4")) {
 
 # 2. Start Backend API in a new PowerShell window
 Write-Host "[2/3] Launching Flask Backend on http://localhost:5000..." -ForegroundColor Green
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$PSScriptRoot\..'; python backend\app.py"
+$pythonExe = if (Test-Path "$PSScriptRoot\..\backend\.venv\Scripts\python.exe") { "$PSScriptRoot\..\backend\.venv\Scripts\python.exe" } else { "python" }
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$PSScriptRoot\..'; & '$pythonExe' backend\app.py"
 
 # 3. Start Next.js Frontend in a new PowerShell window
 Write-Host "[3/3] Launching Next.js Frontend on http://localhost:3000..." -ForegroundColor Green

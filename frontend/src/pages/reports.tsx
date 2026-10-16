@@ -5,7 +5,7 @@ import { AlertCircle, CheckCircle, ShieldAlert, TrendingDown, Camera as CameraIc
 import { useAuth } from "../context/AuthContext";
 import { ModelTrainingPanel } from "../components/ModelTrainingPanel";
 
-const API_BASE = "http://localhost:5000/api";
+import { API_BASE } from "../config/api";
 
 export default function ReportsPage() {
   const { authFetch } = useAuth();

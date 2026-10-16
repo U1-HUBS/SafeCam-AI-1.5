@@ -326,4 +326,62 @@ def test_stream_manager_annotated_toggle():
     assert np.array_equal(sm.get_latest_frame(1, annotated=True), f)
 
 
+def test_grappling_entangled_bodies_detected_as_violence():
+    classifier = ViolenceClassifier(use_gpu=False)
+    estimator = KineticMotionEstimator()
+    t = time.time()
+
+    # Frame 1: entangled bodies grappling
+    f1 = np.full((240, 320, 3), 100, dtype=np.uint8)
+    cv2.circle(f1, (130, 110), 22, (30, 30, 200), -1)
+    cv2.circle(f1, (170, 110), 22, (200, 30, 30), -1)
+    estimator.update(f1, t)
+
+    # Frame 2: violent struggle (wide aspect ratio 120x100 where fighters collide)
+    f2 = np.full((240, 320, 3), 100, dtype=np.uint8)
+    cv2.circle(f2, (140, 120), 28, (30, 30, 220), -1)
+    cv2.circle(f2, (160, 95), 28, (220, 30, 30), -1)
+    cv2.line(f2, (120, 105), (180, 115), (255, 255, 255), 8)
+
+    label, cat, conf, is_violent = classifier.predict_frame(
+        f2,
+        timestamp=t + 0.1,
+        motion_estimator=estimator,
+        override_bodies=[(100, 60, 120, 100)] # Wide merged body box (grappling)
+    )
+
+    assert is_violent is True, "Entangled grappling struggle must be detected as violence"
+    assert cat == "Suspected Fight"
+
+
+def test_two_people_close_proximity_altercation_detected():
+    classifier = ViolenceClassifier(use_gpu=False)
+    estimator = KineticMotionEstimator()
+    t = time.time()
+
+    # Frame 1: two people close together
+    b1 = (80, 50, 50, 120)
+    b2 = (115, 50, 50, 120)
+    f1 = np.full((240, 320, 3), 100, dtype=np.uint8)
+    cv2.circle(f1, (100, 85), 20, (30, 200, 30), -1)
+    cv2.circle(f1, (135, 85), 20, (200, 30, 30), -1)
+    estimator.update(f1, t)
+
+    # Frame 2: rapid chaotic strike / altercation within close combat reach
+    f2 = np.full((240, 320, 3), 100, dtype=np.uint8)
+    cv2.circle(f2, (105, 95), 24, (30, 200, 30), -1)
+    cv2.circle(f2, (130, 80), 24, (200, 30, 30), -1)
+    cv2.line(f2, (100, 85), (145, 85), (255, 255, 255), 10)
+
+    label, cat, conf, is_violent = classifier.predict_frame(
+        f2,
+        timestamp=t + 0.1,
+        motion_estimator=estimator,
+        override_bodies=[b1, b2] # Close proximity
+    )
+
+    assert is_violent is True, "Close proximity altercation must trigger violence"
+    assert cat == "Suspected Fight"
+
+
 

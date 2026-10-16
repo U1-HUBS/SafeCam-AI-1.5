@@ -5,7 +5,7 @@ import { Incident, Camera } from "../types";
 import { Search, Filter, PlayCircle, ShieldCheck, AlertOctagon, HelpCircle, Film } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
-const API_BASE = "http://localhost:5000/api";
+import { API_BASE } from "../config/api";
 
 export default function HistoryPage() {
   const { authFetch, user } = useAuth();

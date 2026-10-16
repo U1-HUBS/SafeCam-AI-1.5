@@ -8,7 +8,7 @@ import { Camera, Incident } from "../types";
 import { playAlertChime } from "../utils/audio";
 import { useAuth } from "../context/AuthContext";
 
-const API_BASE = "http://localhost:5000/api";
+import { API_BASE } from "../config/api";
 
 export default function SurveillancePage() {
   const { authFetch, user } = useAuth();

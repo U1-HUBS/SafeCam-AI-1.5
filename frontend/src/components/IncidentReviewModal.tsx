@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Incident } from "../types";
-import { X, CheckCircle, AlertOctagon, HelpCircle, Film, Shield, Send } from "lucide-react";
+import { X, CheckCircle, AlertOctagon, HelpCircle, Film, Shield, Send, RefreshCw, AlertCircle } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { API_BASE, API_HOST } from "../config/api";
 
 interface IncidentReviewModalProps {
   incident: Incident | null;
@@ -41,27 +42,58 @@ export const IncidentReviewModal: React.FC<IncidentReviewModalProps> = ({
   const [reviewer, setReviewer] = useState<string>(user?.name || "Security Officer");
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [currentIncident, setCurrentIncident] = useState<Incident | null>(incident);
+  const [isPollingTimedOut, setIsPollingTimedOut] = useState<boolean>(false);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   // Sync internal incident state when prop changes
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentIncident(incident);
+    setIsPollingTimedOut(false);
     if (user?.name) {
       setReviewer(user.name);
     }
   }, [incident, user]);
 
-  // Auto-poll if clip is still processing so video starts automatically
-  React.useEffect(() => {
-    if (!currentIncident || currentIncident.clip_status === "READY") return;
+  // Manual status refresh handler
+  const checkClipStatus = useCallback(async () => {
+    if (!currentIncident) return;
+    setIsRefreshing(true);
+    try {
+      const res = await authFetch(`${API_BASE}/incidents/${currentIncident.id}`);
+      if (res.ok) {
+        const updated: Incident = await res.json();
+        setCurrentIncident(updated);
+        if (updated.clip_status === "READY") {
+          setIsPollingTimedOut(false);
+        }
+      }
+    } catch (err) {
+      console.warn("Error refreshing incident clip status:", err);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [currentIncident, authFetch]);
+
+  // Bounded auto-poll: stops immediately on READY or FAILED, and caps at 10 retries (~12s)
+  useEffect(() => {
+    if (!currentIncident) return;
+    if (currentIncident.clip_status === "READY" || currentIncident.clip_status === "FAILED") {
+      return;
+    }
+
+    let pollAttempts = 0;
+    const maxAttempts = 10;
 
     const interval = setInterval(async () => {
+      pollAttempts += 1;
       try {
-        const res = await authFetch(`http://localhost:5000/api/incidents/${currentIncident.id}`);
+        const res = await authFetch(`${API_BASE}/incidents/${currentIncident.id}`);
         if (res.ok) {
           const updated: Incident = await res.json();
-          if (updated.clip_status === "READY") {
+          if (updated.clip_status === "READY" || updated.clip_status === "FAILED") {
             setCurrentIncident(updated);
             clearInterval(interval);
+            return;
           } else if (updated.thumbnail_url && !currentIncident.thumbnail_url) {
             setCurrentIncident(updated);
           }
@@ -69,10 +101,15 @@ export const IncidentReviewModal: React.FC<IncidentReviewModalProps> = ({
       } catch (err) {
         // Backend temporarily busy
       }
+
+      if (pollAttempts >= maxAttempts) {
+        clearInterval(interval);
+        setIsPollingTimedOut(true);
+      }
     }, 1200);
 
     return () => clearInterval(interval);
-  }, [currentIncident, authFetch]);
+  }, [currentIncident?.id, currentIncident?.clip_status, authFetch]);
 
 
   if (!currentIncident) return null;
@@ -125,7 +162,7 @@ export const IncidentReviewModal: React.FC<IncidentReviewModalProps> = ({
               {currentIncident.clip_status === "READY" ? (
                 <video
                   key={`${currentIncident.id}-${currentIncident.clip_status}`}
-                  src={`http://localhost:5000/api/incidents/${currentIncident.id}/clip${
+                  src={`${API_BASE}/incidents/${currentIncident.id}/clip${
                     token ? `?token=${encodeURIComponent(token)}` : ""
                   }`}
                   controls
@@ -137,29 +174,70 @@ export const IncidentReviewModal: React.FC<IncidentReviewModalProps> = ({
               ) : currentIncident.thumbnail_url ? (
                 <div className="relative w-full h-full flex items-center justify-center bg-black">
                   <img
-                    src={`http://localhost:5000${currentIncident.thumbnail_url}${
+                    src={`${API_HOST}${currentIncident.thumbnail_url}${
                       token ? `?token=${encodeURIComponent(token)}` : ""
                     }`}
                     alt="Incident Peak Snapshot"
-                    className="w-full h-full object-contain opacity-85"
+                    className="w-full h-full object-contain opacity-90"
                   />
-                  <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/95 via-black/70 to-transparent flex items-center justify-between">
-                    <div className="flex items-center space-x-2 text-blue-400">
-                      <Film className="w-4 h-4 animate-spin text-blue-400" />
-                      <span className="text-xs font-semibold text-white">Compiling Full Incident Video Clip (~3s)...</span>
-                    </div>
+                  <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/95 via-black/75 to-transparent flex items-center justify-between">
+                    {currentIncident.clip_status === "FAILED" || isPollingTimedOut ? (
+                      <div className="flex items-center space-x-2 text-amber-400">
+                        <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+                        <span className="text-xs font-semibold text-white">
+                          Video clip unavailable — reviewing snapshot
+                        </span>
+                        <button
+                          type="button"
+                          onClick={checkClipStatus}
+                          disabled={isRefreshing}
+                          className="ml-2 px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-blue-400 border border-slate-700 rounded text-[11px] flex items-center space-x-1"
+                        >
+                          <RefreshCw className={`w-3 h-3 ${isRefreshing ? "animate-spin" : ""}`} />
+                          <span>Retry</span>
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center space-x-2 text-blue-400">
+                        <Film className="w-4 h-4 animate-spin text-blue-400" />
+                        <span className="text-xs font-semibold text-white">
+                          Compiling video clip... (Snapshot ready for review)
+                        </span>
+                      </div>
+                    )}
                     <span className="text-[10px] bg-blue-500/20 text-blue-300 border border-blue-500/40 px-2 py-0.5 rounded font-mono uppercase tracking-wider">
-                      Instant Snapshot
+                      Peak Snapshot
                     </span>
                   </div>
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center text-gray-400 text-xs p-6 text-center">
-                  <Film className="w-10 h-10 mb-2 opacity-50 text-blue-400 animate-spin" />
-                  <span className="font-semibold text-gray-300">Assembling Pre & Post Event Video Clip...</span>
-                  <span className="text-[11px] text-gray-500 mt-1">
-                    Clip Status: {currentIncident.clip_status}
-                  </span>
+                  {currentIncident.clip_status === "FAILED" || isPollingTimedOut ? (
+                    <>
+                      <AlertOctagon className="w-10 h-10 mb-2 text-amber-500/70" />
+                      <span className="font-semibold text-gray-300">Video Recording Unavailable</span>
+                      <span className="text-[11px] text-gray-500 mt-1 mb-3">
+                        Clip status: {currentIncident.clip_status}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={checkClipStatus}
+                        disabled={isRefreshing}
+                        className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-blue-400 border border-slate-700 rounded-lg text-xs flex items-center space-x-1.5"
+                      >
+                        <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin" : ""}`} />
+                        <span>Check Clip Status</span>
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Film className="w-10 h-10 mb-2 opacity-50 text-blue-400 animate-spin" />
+                      <span className="font-semibold text-gray-300">Assembling Pre & Post Event Video Clip...</span>
+                      <span className="text-[11px] text-gray-500 mt-1">
+                        Clip Status: {currentIncident.clip_status}
+                      </span>
+                    </>
+                  )}
                 </div>
               )}
             </div>

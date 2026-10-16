@@ -272,12 +272,8 @@ class YoloPersonDetector:
                 union = (b1[2] * b1[3]) + (b2[2] * b2[3]) - intersection
                 iou = intersection / union if union > 0 else 0.0
 
-                c1 = (b1[0] + b1[2] / 2, b1[1] + b1[3] / 2)
-                c2 = (b2[0] + b2[2] / 2, b2[1] + b2[3] / 2)
-                center_dist = np.hypot(c1[0] - c2[0], c1[1] - c2[1])
-                min_dim = min(b1[2], b2[2], b1[3], b2[3])
-
-                if iou >= iou_thresh or center_dist < (min_dim * 0.6):
+                # Only merge true duplicate candidate boxes for the same person (IoU overlap)
+                if iou >= iou_thresh:
                     nx = min(b1[0], b2[0])
                     ny = min(b1[1], b2[1])
                     nw = max(b1[0] + b1[2], b2[0] + b2[2]) - nx
@@ -347,31 +343,62 @@ class LimbContactDetector:
 
         # Solo actor case: <= 1 body detected
         if person_count <= 1:
+            is_wide_struggle = False
+            if person_count == 1:
+                b = detected_bodies[0]
+                if b[3] > 0 and (b[2] / float(b[3]) >= 0.65):
+                    is_wide_struggle = True
             return {
                 "person_count": person_count,
                 "is_multi_person": False,
                 "has_physical_contact": False,
+                "is_close_proximity": False,
+                "is_wide_struggle": is_wide_struggle,
                 "contact_type": None,
                 "bodies": detected_bodies,
                 "detected_persons": detected_persons
             }
 
         # Multi-person case: >= 2 bodies detected.
-        # Now check if striking limbs (hands or feet) contact another person's body!
+        # Scale bounding boxes to match motion_contours coordinate space (target_size: 320x240)
+        h_orig, w_orig = frame_bgr.shape[:2]
+        scale_x = float(self.target_size[0]) / max(1, w_orig)
+        scale_y = float(self.target_size[1]) / max(1, h_orig)
+
+        eval_bodies = [
+            (
+                int(b[0] * scale_x),
+                int(b[1] * scale_y),
+                int(b[2] * scale_x),
+                int(b[3] * scale_y)
+            )
+            for b in detected_bodies
+        ]
+
+        # Check proximity, striking limbs, and physical contact
         hand_contact = False
         foot_contact = False
         body_collision = False
+        is_close_proximity = False
 
-        for i, b_src in enumerate(detected_bodies):
+        for i, b_src in enumerate(eval_bodies):
             sx, sy, sw, sh = b_src
             src_mid_y = sy + int(sh * 0.55)
             src_reach = (sx - margin, sy - margin, sw + 2 * margin, sh + 2 * margin)
+            c1 = (sx + sw / 2.0, sy + sh / 2.0)
 
-            for j, b_dst in enumerate(detected_bodies):
+            for j, b_dst in enumerate(eval_bodies):
                 if i == j:
                     continue
 
                 dx, dy, dw, dh = b_dst
+                c2 = (dx + dw / 2.0, dy + dh / 2.0)
+                center_dist = np.hypot(c1[0] - c2[0], c1[1] - c2[1])
+
+                # Check proximity: within close combat / altercation reach
+                if center_dist < (max(sw, dw) * 1.5) or center_dist < ((sw + dw) * 0.85):
+                    is_close_proximity = True
+
                 target_box = (
                     dx - margin,
                     dy - margin,
@@ -417,6 +444,7 @@ class LimbContactDetector:
             "person_count": person_count,
             "is_multi_person": True,
             "has_physical_contact": has_contact,
+            "is_close_proximity": is_close_proximity,
             "contact_type": contact_type,
             "bodies": detected_bodies,
             "detected_persons": detected_persons
@@ -450,10 +478,9 @@ class TemporalAggregator:
         self.ema_alpha = ema_alpha
         self.min_sustained_seconds = min_sustained_seconds
 
-        # Deque of (timestamp, is_violent, confidence, label, category)
         self.history: deque = deque()
         self.active_incident = None
-        self.last_trigger_time: float = 0.0
+        self.last_trigger_time: float = -999.0
         self.last_positive_time: float = 0.0
         self.ema_confidence: float = 0.0
         self.sustained_start_time: Optional[float] = None
@@ -493,7 +520,7 @@ class TemporalAggregator:
                 self.sustained_start_time = None
 
         # Check if currently in cooldown from a previous incident
-        in_cooldown = (timestamp - self.last_trigger_time) < self.cooldown_seconds
+        in_cooldown = (self.last_trigger_time > -900) and ((timestamp - self.last_trigger_time) < self.cooldown_seconds)
 
         # Evaluate window metrics
         total_frames = len(self.history)
@@ -730,6 +757,8 @@ class ViolenceClassifier:
         person_count = contact_info["person_count"]
         has_contact = contact_info["has_physical_contact"]
         contact_type = contact_info.get("contact_type")
+        is_close_proximity = contact_info.get("is_close_proximity", False)
+        is_wide_struggle = contact_info.get("is_wide_struggle", False)
         detected_persons = contact_info.get("detected_persons", [])
 
         if camera_id is not None:
@@ -737,23 +766,62 @@ class ViolenceClassifier:
                 self.camera_persons[camera_id] = detected_persons
         self.last_detected_persons = detected_persons
 
-        # Suppress single individuals shadowboxing, kicking, or working out alone
-        if REQUIRE_MULTI_PERSON_FOR_VIOLENCE and person_count <= 1:
+        # Baseline: If no kinetic motion in scene, definitely non-violent
+        if not is_active:
             return (
-                "single person exercising or shadowboxing alone",
+                "students walking normally in hallway",
                 "Non-Violent",
-                0.10,
+                0.08,
                 False
             )
 
-        # Suppress multiple people when neither hands nor feet contact another person's body
-        if REQUIRE_PHYSICAL_CONTACT_FOR_VIOLENCE and not has_contact:
-            return (
-                "people moving or practicing martial arts without physical contact",
-                "Non-Violent",
-                0.12,
-                False
-            )
+        # 0 detected persons: if no massive kinetic energy, return non-violent
+        if person_count == 0:
+            if kinetic_energy < 0.12 or turbulence < 0.45:
+                return (
+                    "students walking normally in hallway",
+                    "Non-Violent",
+                    0.05,
+                    False
+                )
+
+        # Solo actor case (<= 1 body detected)
+        if person_count <= 1:
+            # Calm/routine movement by a single individual
+            if turbulence < 0.25 and kinetic_energy < 0.05:
+                return (
+                    "students walking normally in hallway",
+                    "Non-Violent",
+                    0.08,
+                    False
+                )
+            # Active movement by a single normal human profile: suppress as solo exercise / shadowboxing
+            if REQUIRE_MULTI_PERSON_FOR_VIOLENCE or not is_wide_struggle:
+                return (
+                    "single person exercising or shadowboxing alone",
+                    "Non-Violent",
+                    0.10,
+                    False
+                )
+
+        # Multi-person case: >= 2 bodies detected
+        if person_count >= 2:
+            # If physical contact is strictly required via config, check contact
+            if REQUIRE_PHYSICAL_CONTACT_FOR_VIOLENCE and not has_contact:
+                return (
+                    "people moving or practicing martial arts without physical contact",
+                    "Non-Violent",
+                    0.12,
+                    False
+                )
+            # Suppress people at a distance with no close interaction or contact (shadowboxing across room)
+            if not is_close_proximity and not has_contact:
+                return (
+                    "people moving or practicing martial arts without physical contact",
+                    "Non-Violent",
+                    0.12,
+                    False
+                )
 
         # Step 3: OpenCLIP Neural Inference (if loaded)
         if self.loaded and self.model is not None:
@@ -817,16 +885,20 @@ class ViolenceClassifier:
                 pass
 
         # Step 4: High-Accuracy Kinetic Fallback with Confirmed Physical Strike/Contact
-        if is_active and (turbulence >= 0.30 or kinetic_energy >= 0.10):
-            conf = min(0.92, 0.55 + (turbulence * 0.35))
+        if is_active and (turbulence >= 0.28 or kinetic_energy >= 0.08):
+            conf = min(0.92, 0.58 + (turbulence * 0.35))
             if contact_type == "hand":
                 label = "physical punch or strike with hand contact"
             elif contact_type == "foot":
                 label = "physical kick or strike with foot contact"
             elif contact_type == "hand_and_foot":
                 label = "violent fight with kicking and punching contact"
-            else:
+            elif contact_type == "body_collision":
                 label = "people wrestling or fighting violently"
+            elif person_count >= 2:
+                label = "physical altercation between people"
+            else:
+                label = "violent struggle or aggressive altercation"
             return (
                 label,
                 "Suspected Fight",

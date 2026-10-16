@@ -161,6 +161,15 @@ class CameraStreamWorker:
                 else:
                     time.sleep(0.005)
 
+            # Finalize any in-flight incident collectors if stream disconnects or reaches EOF
+            with self.lock:
+                for collector in list(self.active_incident_collectors):
+                    try:
+                        self._finalize_incident_clip(collector)
+                    except Exception as ce:
+                        print(f"[CameraStreamWorker] Warning: Error finalizing clip on stream EOF: {ce}")
+                self.active_incident_collectors.clear()
+
             cap.release()
             time.sleep(1.0)
 
@@ -232,10 +241,6 @@ class CameraStreamWorker:
                 box_color = (40, 40, 230)      # Bright Red (BGR)
                 tag_bg = (30, 30, 200)
                 tag_text = f"Person #{pid} [VIOLENCE] {int(conf * 100)}%"
-            elif is_solo:
-                box_color = (40, 215, 255)     # Amber / Yellow (BGR)
-                tag_bg = (30, 180, 220)
-                tag_text = f"Person #{pid} [SOLO] {int(conf * 100)}%"
             else:
                 box_color = (80, 220, 80)      # Emerald Green (BGR)
                 tag_bg = (60, 180, 60)
@@ -263,18 +268,18 @@ class CameraStreamWorker:
             )
 
         # Top-Right HUD Badge: Always visible YOLO Status Indicator
-        if person_count == 0:
+        if is_violent:
+            hud_label = f"ALERT: {person_count} PERSON(S)" if person_count > 0 else "ALERT: ALTERCATION"
+            hud_sub = "ALTERCATION DETECTED"
+            hud_bg = (30, 30, 200)
+        elif person_count == 0:
             hud_label = "YOLO: SCANNING"
             hud_sub = "0 PERSONS DETECTED"
             hud_bg = (100, 100, 100)
         elif is_solo:
             hud_label = "YOLO: 1 PERSON"
-            hud_sub = "SOLO (VIOLENCE SUPPRESSED)"
+            hud_sub = "MONITORING ACTIVE"
             hud_bg = (20, 140, 180)
-        elif is_violent:
-            hud_label = f"YOLO: {person_count} PERSONS"
-            hud_sub = "ALTERCATION DETECTED"
-            hud_bg = (30, 30, 200)
         else:
             hud_label = f"YOLO: {person_count} PERSONS"
             hud_sub = "MONITORING ACTIVE"

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Camera } from "../types";
 import { Video, AlertTriangle, ShieldCheck, Settings, Trash2, Activity, Users, Tag } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { API_BASE } from "../config/api";
 
 interface CameraWallProps {
   cameras: Camera[];
@@ -157,7 +158,7 @@ export const CameraWall: React.FC<CameraWallProps> = ({
               {isOnline ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={`http://localhost:5000/api/stream/${camera.id}/live?labels=${isCameraLabelsOn ? 1 : 0}`}
+                  src={`${API_BASE}/stream/${camera.id}/live?labels=${isCameraLabelsOn ? 1 : 0}`}
                   alt={camera.name}
                   className="w-full h-full object-cover"
                   onError={(e) => {

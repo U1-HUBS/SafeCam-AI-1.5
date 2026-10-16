@@ -14,7 +14,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API_BASE = "http://localhost:5000/api";
+import { API_BASE } from "../config/api";
 const TOKEN_KEY = "sentinel_auth_token";
 const USER_KEY = "sentinel_user_profile";
 

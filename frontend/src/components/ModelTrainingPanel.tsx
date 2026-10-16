@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
-const API_BASE = "http://localhost:5000/api";
+import { API_BASE } from "../config/api";
 
 interface TrainingStats {
   total_reviewed: number;

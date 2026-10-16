@@ -14,6 +14,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { API_BASE } from "../config/api";
 
 interface CameraModalProps {
   isOpen: boolean;
@@ -66,7 +67,7 @@ export const CameraModal: React.FC<CameraModalProps> = ({
   const fetchSimulations = async () => {
     setIsLoadingLibrary(true);
     try {
-      const res = await authFetch("http://localhost:5000/api/cameras/simulations");
+      const res = await authFetch(`${API_BASE}/cameras/simulations`);
       if (res.ok) {
         const data = await res.json();
         setSimulationVideos(data);
@@ -124,7 +125,7 @@ export const CameraModal: React.FC<CameraModalProps> = ({
     formData.append("file", file);
 
     try {
-      const res = await authFetch("http://localhost:5000/api/cameras/upload", {
+      const res = await authFetch(`${API_BASE}/cameras/upload`, {
         method: "POST",
         body: formData,
       });
@@ -225,7 +226,7 @@ export const CameraModal: React.FC<CameraModalProps> = ({
     setTestResult("Testing connectivity...");
     try {
       if (cameraToEdit?.id) {
-        const res = await authFetch(`http://localhost:5000/api/cameras/${cameraToEdit.id}/test`, {
+        const res = await authFetch(`${API_BASE}/cameras/${cameraToEdit.id}/test`, {
           method: "POST",
         });
 
@@ -632,7 +633,7 @@ export const CameraModal: React.FC<CameraModalProps> = ({
 
               <div>
                 <label className="text-gray-400 text-[11px] block mb-1">
-                  Detection Sensitivity: {sensitivity.toFixed(2)}
+                  Confidence Threshold: {sensitivity.toFixed(2)} (Default: 0.25)
                 </label>
                 <input
                   type="range"
@@ -643,6 +644,9 @@ export const CameraModal: React.FC<CameraModalProps> = ({
                   onChange={(e) => setSensitivity(Number(e.target.value))}
                   className="w-full"
                 />
+                <span className="text-[10px] text-gray-500 block mt-0.5">
+                  Lower value triggers alerts more easily; higher requires stricter confidence.
+                </span>
               </div>
             </div>
 

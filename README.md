@@ -25,7 +25,7 @@
 From the repository root:
 ```powershell
 # Install backend Python dependencies
-python -m pip install flask flask-cors sqlalchemy pytest opencv-python numpy open_clip_torch torch torchvision
+python -m pip install flask flask-cors sqlalchemy pytest opencv-python numpy open_clip_torch torch torchvision ultralytics
 
 # Generate synthetic sample videos (for simulation)
 python sample_videos/generate_sample.py
