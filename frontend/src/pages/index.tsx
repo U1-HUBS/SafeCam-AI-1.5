@@ -131,7 +131,7 @@ export default function SurveillancePage() {
 
   // Set of camera IDs that currently have active alerts
   const activeAlertCameraIds = useMemo(() => {
-    return new Set(incidents.map((i) => i.camera_id));
+    return new Set(incidents.map((i) => i.camera_id).filter((id): id is number => typeof id === "number"));
   }, [incidents]);
 
   // Acknowledge incident
@@ -192,14 +192,15 @@ export default function SurveillancePage() {
     }
   };
 
-  // Delete camera
+  // Remove camera from live monitoring
   const handleDeleteCamera = async (id: number) => {
-    if (confirm("Are you sure you want to remove this camera?")) {
+    if (confirm("Are you sure you want to remove this camera from live monitoring? Past alerts and incident records will be preserved in incident history.")) {
       try {
         await authFetch(`${API_BASE}/cameras/${id}`, { method: "DELETE" });
-        fetchCameras();
+        await fetchCameras();
+        await fetchIncidents();
       } catch (e) {
-        console.error("Failed to delete camera:", e);
+        console.error("Failed to remove camera:", e);
       }
     }
   };

@@ -46,7 +46,25 @@ def resolve_stream_source(stream_url: str):
         p = BASE_DIR / p
     return str(p)
 
-DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{STORAGE_DIR / 'cctv_sentinel.db'}")
+def _normalize_database_url(url: str | None) -> str:
+    if not url:
+        db_file = STORAGE_DIR / "cctv_sentinel.db"
+        db_file.parent.mkdir(parents=True, exist_ok=True)
+        return f"sqlite:///{db_file.as_posix()}"
+
+    if url.startswith("sqlite:///"):
+        path_part = url[len("sqlite:///"):].strip()
+        if path_part == ":memory:":
+            return url
+        p = Path(path_part)
+        if not p.is_absolute() and not (len(path_part) > 1 and path_part[1] == ":"):
+            p = (BASE_DIR / p).resolve()
+        p.parent.mkdir(parents=True, exist_ok=True)
+        return f"sqlite:///{p.as_posix()}"
+
+    return url
+
+DATABASE_URL = _normalize_database_url(os.getenv("DATABASE_URL"))
 
 # Default AI & Aggregation Configuration
 DEFAULT_AI_THRESHOLD = float(os.getenv("DEFAULT_AI_THRESHOLD", "0.25"))

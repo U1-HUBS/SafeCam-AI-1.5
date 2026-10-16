@@ -3,6 +3,7 @@ import time
 import datetime
 import threading
 from collections import deque
+from pathlib import Path
 from typing import List, Dict, Optional, Tuple
 import numpy as np
 import cv2
@@ -144,9 +145,19 @@ class YoloPersonDetector:
                 return
             try:
                 from ultralytics import YOLO
+                from backend.config import BASE_DIR, MODELS_DIR
+                candidate_paths = [
+                    BASE_DIR / "yolov8n.pt",
+                    MODELS_DIR / "yolov8n.pt",
+                    Path("yolov8n.pt"),
+                ]
                 model_path = "yolov8n.pt"
+                for cp in candidate_paths:
+                    if cp.is_file():
+                        model_path = str(cp.resolve())
+                        break
                 self.yolo_model = YOLO(model_path)
-                print("[YoloPersonDetector] Successfully loaded YOLOv8 person detector.")
+                print(f"[YoloPersonDetector] Successfully loaded YOLOv8 person detector from {model_path}.")
             except Exception as e:
                 print(f"[YoloPersonDetector] YOLOv8 notice: {e}. Falling back to OpenCV NMS detector.")
                 self.yolo_failed = True

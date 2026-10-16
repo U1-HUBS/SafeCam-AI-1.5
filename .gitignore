@@ -40,9 +40,11 @@ storage/*.db-journal
 storage/clips/*
 storage/thumbnails/*
 storage/uploads/*
+storage/datasets/*
 !storage/clips/.gitkeep
 !storage/thumbnails/.gitkeep
 !storage/uploads/.gitkeep
+!storage/datasets/.gitkeep
 *.tsbuildinfo
 
 # IDEs & System

@@ -67,7 +67,7 @@ export const AlertQueue: React.FC<AlertQueueProps> = ({
                   </div>
                   <div className="flex items-center space-x-3 text-[11px] text-gray-400 mt-0.5">
                     <span>
-                      Camera: <strong className="text-gray-200">{alert.camera_name || `Cam #${alert.camera_id}`}</strong>
+                      Camera: <strong className="text-gray-200">{alert.camera_name || (alert.camera_id ? `Cam #${alert.camera_id}` : "Removed Camera")}</strong>
                     </span>
                     <span>
                       Confidence: <strong className="text-white">{(alert.peak_confidence * 100).toFixed(1)}%</strong>

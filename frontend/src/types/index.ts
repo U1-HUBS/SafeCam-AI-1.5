@@ -12,6 +12,8 @@ export interface Camera {
   pre_buffer_seconds: number;
   post_buffer_seconds: number;
   status: string;
+  is_deleted?: boolean;
+  deleted_at?: string;
   runtime_status?: string;
   last_seen_at?: string;
   latest_prediction?: {
@@ -53,7 +55,7 @@ export interface IncidentEvent {
 export interface Incident {
   id: number;
   public_id: string;
-  camera_id: number;
+  camera_id?: number | null;
   camera_name?: string;
   camera_location?: string;
   category: string;

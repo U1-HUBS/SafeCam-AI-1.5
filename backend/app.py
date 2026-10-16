@@ -14,7 +14,7 @@ from flask import Flask, Response, jsonify
 from flask_cors import CORS
 
 from backend.config import SAMPLE_VIDEOS_DIR, MAX_UPLOAD_SIZE_BYTES
-from backend.database import engine, Base, SessionLocal
+from backend.database import engine, Base, SessionLocal, ensure_schema_migrations
 from backend.models import Camera, Incident, IncidentEvent, IncidentReview, User
 from backend.services.stream_manager import StreamManager
 from backend.api.cameras import cameras_bp, set_stream_manager as set_cam_sm
@@ -37,8 +37,9 @@ def broadcast_event(data: dict):
             event_subscribers.remove(q)
 
 def create_app():
-    # Initialize DB
+    # Initialize DB & perform non-destructive schema migrations
     Base.metadata.create_all(bind=engine)
+    ensure_schema_migrations(engine)
 
     app = Flask(__name__)
     app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_SIZE_BYTES
@@ -160,7 +161,7 @@ def _seed_initial_users():
 def _seed_initial_cameras(stream_manager: StreamManager):
     db = SessionLocal()
     try:
-        count = db.query(Camera).count()
+        count = db.query(Camera).filter(Camera.is_deleted == False).count()
         if count == 0:
             sample_video_path = str(SAMPLE_VIDEOS_DIR / "sample_hallway.mp4")
             cams = [
@@ -220,4 +221,6 @@ def _seed_initial_cameras(stream_manager: StreamManager):
 
 if __name__ == "__main__":
     app, sm = create_app()
-    app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
+    host = os.getenv("HOST", "0.0.0.0")
+    port = int(os.getenv("PORT", "5000"))
+    app.run(host=host, port=port, debug=False, threaded=True)

@@ -157,6 +157,8 @@ def seed_sample_incidents(db, cameras: list[Camera]) -> list[Incident]:
     inc1 = Incident(
         public_id=f"inc-seed-01",
         camera_id=cam1.id,
+        camera_name=cam1.name,
+        camera_location=cam1.location,
         category="Suspected Fight",
         raw_ai_label="violent fight with kicking and punching contact",
         severity="Critical",
@@ -173,6 +175,8 @@ def seed_sample_incidents(db, cameras: list[Camera]) -> list[Incident]:
     inc2 = Incident(
         public_id=f"inc-seed-02",
         camera_id=cam2.id,
+        camera_name=cam2.name,
+        camera_location=cam2.location,
         category="Suspected Fight",
         raw_ai_label="physical punch or strike with hand contact",
         severity="Low",

@@ -22,11 +22,14 @@ class Camera(Base):
     pre_buffer_seconds = Column(Integer, default=4)
     post_buffer_seconds = Column(Integer, default=4)
     status = Column(String(20), default="OFFLINE")  # ONLINE, OFFLINE, DEGRADED, DISABLED
+    is_deleted = Column(Boolean, default=False)
+    deleted_at = Column(DateTime, nullable=True)
     last_seen_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
 
-    incidents = relationship("Incident", back_populates="camera", cascade="all, delete-orphan")
+    # Note: No cascade="all, delete-orphan". Historical incidents and alerts MUST survive camera deletion.
+    incidents = relationship("Incident", back_populates="camera")
 
     def to_dict(self):
         return {
@@ -43,6 +46,8 @@ class Camera(Base):
             "pre_buffer_seconds": self.pre_buffer_seconds,
             "post_buffer_seconds": self.post_buffer_seconds,
             "status": self.status,
+            "is_deleted": self.is_deleted,
+            "deleted_at": self.deleted_at.isoformat() if self.deleted_at else None,
             "last_seen_at": self.last_seen_at.isoformat() if self.last_seen_at else None,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
@@ -54,7 +59,9 @@ class Incident(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     public_id = Column(String(50), unique=True, index=True, nullable=False)
-    camera_id = Column(Integer, ForeignKey("cameras.id"), nullable=False)
+    camera_id = Column(Integer, ForeignKey("cameras.id", ondelete="SET NULL"), nullable=True)
+    camera_name = Column(String(100), nullable=True)
+    camera_location = Column(String(150), nullable=True)
     category = Column(String(50), nullable=False, default="Suspected Violence")
     raw_ai_label = Column(String(100), nullable=True)
     severity = Column(String(20), default="High")  # Critical, High, Medium, Low
@@ -83,12 +90,26 @@ class Incident(Base):
 
     def to_dict(self):
         latest_review = self.reviews[-1].to_dict() if self.reviews else None
+        
+        display_camera_name = None
+        display_camera_location = None
+        if self.camera:
+            display_camera_name = self.camera.name
+            display_camera_location = self.camera.location
+        elif self.camera_name:
+            display_camera_name = self.camera_name
+            display_camera_location = self.camera_location
+        elif self.camera_id:
+            display_camera_name = f"Camera #{self.camera_id}"
+        else:
+            display_camera_name = "Removed Camera"
+
         return {
             "id": self.id,
             "public_id": self.public_id,
             "camera_id": self.camera_id,
-            "camera_name": self.camera.name if self.camera else None,
-            "camera_location": self.camera.location if self.camera else None,
+            "camera_name": display_camera_name,
+            "camera_location": display_camera_location or self.camera_location,
             "category": self.category,
             "raw_ai_label": self.raw_ai_label,
             "severity": self.severity,

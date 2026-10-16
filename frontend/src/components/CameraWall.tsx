@@ -143,7 +143,7 @@ export const CameraWall: React.FC<CameraWallProps> = ({
                     <button
                       onClick={() => onDeleteCamera(camera.id)}
                       className="p-1 text-gray-400 hover:text-red-400 hover:bg-slate-800 rounded transition"
-                      title="Remove camera"
+                      title="Remove camera from live monitoring"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>

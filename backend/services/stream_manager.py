@@ -3,7 +3,7 @@ import uuid
 import datetime
 import threading
 from collections import deque
-from typing import Dict, Optional, Callable
+from typing import Dict, List, Optional, Callable
 import cv2
 import numpy as np
 
@@ -81,6 +81,15 @@ class CameraStreamWorker:
 
     def stop(self):
         self.running = False
+        # Finalize any in-flight incident collectors so ongoing recordings are saved cleanly
+        with self.lock:
+            for collector in list(self.active_incident_collectors):
+                try:
+                    self._finalize_incident_clip(collector)
+                except Exception as ce:
+                    print(f"[CameraStreamWorker] Warning: Error finalizing clip on worker stop: {ce}")
+            self.active_incident_collectors.clear()
+
         if self.thread and self.thread.is_alive():
             self.thread.join(timeout=2.0)
 
@@ -311,9 +320,15 @@ class CameraStreamWorker:
                 except Exception as te:
                     print(f"[CameraStreamWorker] Warning: Instant thumbnail write failed: {te}")
 
+            cam = db.query(Camera).filter(Camera.id == self.camera_id).first()
+            cam_name = cam.name if cam else None
+            cam_location = cam.location if cam else None
+
             incident = Incident(
                 public_id=public_id,
                 camera_id=self.camera_id,
+                camera_name=cam_name,
+                camera_location=cam_location,
                 category=trigger_data["category"],
                 raw_ai_label=trigger_data["raw_ai_label"],
                 severity=trigger_data["severity"],
@@ -429,7 +444,7 @@ class StreamManager:
     def reload_all_active_cameras(self):
         db = SessionLocal()
         try:
-            cameras = db.query(Camera).filter(Camera.enabled == True).all()
+            cameras = db.query(Camera).filter(Camera.is_deleted == False, Camera.enabled == True).all()
             for cam in cameras:
                 self.start_camera(cam)
         finally:

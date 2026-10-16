@@ -23,7 +23,7 @@ def get_summary_report():
         by_category = {}
 
         for inc in all_incidents:
-            cam_name = inc.camera.name if inc.camera else f"Camera #{inc.camera_id}"
+            cam_name = inc.camera.name if inc.camera else (inc.camera_name or (f"Camera #{inc.camera_id}" if inc.camera_id else "Removed Camera"))
             by_camera[cam_name] = by_camera.get(cam_name, 0) + 1
 
             sev = inc.severity or "Medium"

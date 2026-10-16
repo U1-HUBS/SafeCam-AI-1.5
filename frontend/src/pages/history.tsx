@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Header } from "../components/Header";
 import { IncidentReviewModal } from "../components/IncidentReviewModal";
 import { Incident, Camera } from "../types";
@@ -35,6 +35,18 @@ export default function HistoryPage() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  // Dynamically build filter list of active and historic removed cameras
+  const cameraOptions = useMemo(() => {
+    const map = new Map<string, string>();
+    cameras.forEach((c) => map.set(String(c.id), c.name));
+    incidents.forEach((i) => {
+      if (i.camera_id && !map.has(String(i.camera_id))) {
+        map.set(String(i.camera_id), i.camera_name ? `${i.camera_name} (Removed)` : `Camera #${i.camera_id} (Removed)`);
+      }
+    });
+    return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
+  }, [cameras, incidents]);
 
   const filteredIncidents = incidents.filter((inc) => {
     if (search && !inc.public_id.toLowerCase().includes(search.toLowerCase()) &&
@@ -112,7 +124,7 @@ export default function HistoryPage() {
             className="bg-slate-900 border border-sentinel-border rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none"
           >
             <option value="">All Cameras</option>
-            {cameras.map((c) => (
+            {cameraOptions.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
               </option>
@@ -179,8 +191,8 @@ export default function HistoryPage() {
                         {inc.public_id}
                       </td>
                       <td className="py-3 px-4">
-                        <div className="font-semibold text-white">{inc.camera_name || `Cam #${inc.camera_id}`}</div>
-                        <div className="text-[11px] text-gray-400">{inc.camera_location}</div>
+                        <div className="font-semibold text-white">{inc.camera_name || (inc.camera_id ? `Cam #${inc.camera_id}` : "Removed Camera")}</div>
+                        <div className="text-[11px] text-gray-400">{inc.camera_location || "N/A"}</div>
                       </td>
                       <td className="py-3 px-4 text-gray-300">
                         {new Date(inc.detected_at).toLocaleString()}

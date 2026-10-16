@@ -34,11 +34,15 @@ def set_stream_manager(sm):
 def list_cameras():
     db = SessionLocal()
     try:
-        cameras = db.query(Camera).all()
+        include_deleted = request.args.get("include_deleted", "").lower() in ("1", "true", "yes")
+        query = db.query(Camera)
+        if not include_deleted:
+            query = query.filter(Camera.is_deleted == False)
+        cameras = query.all()
         result = []
         for cam in cameras:
             cam_data = cam.to_dict()
-            if stream_manager:
+            if stream_manager and not cam.is_deleted:
                 status_info = stream_manager.get_camera_status(cam.id)
                 cam_data["runtime_status"] = status_info.get("status", cam.status)
                 cam_data["latest_prediction"] = status_info.get("latest_prediction")
@@ -87,7 +91,7 @@ def create_camera():
 def get_camera(camera_id):
     db = SessionLocal()
     try:
-        camera = db.query(Camera).filter(Camera.id == camera_id).first()
+        camera = db.query(Camera).filter(Camera.id == camera_id, Camera.is_deleted == False).first()
         if not camera:
             return jsonify({"error": "Camera not found"}), 404
         cam_data = camera.to_dict()
@@ -106,7 +110,7 @@ def update_camera(camera_id):
     data = request.json or {}
     db = SessionLocal()
     try:
-        camera = db.query(Camera).filter(Camera.id == camera_id).first()
+        camera = db.query(Camera).filter(Camera.id == camera_id, Camera.is_deleted == False).first()
         if not camera:
             return jsonify({"error": "Camera not found"}), 404
 
@@ -135,16 +139,32 @@ def update_camera(camera_id):
 def delete_camera(camera_id):
     db = SessionLocal()
     try:
-        camera = db.query(Camera).filter(Camera.id == camera_id).first()
+        camera = db.query(Camera).filter(Camera.id == camera_id, Camera.is_deleted == False).first()
         if not camera:
             return jsonify({"error": "Camera not found"}), 404
 
+        # 1. Stop live stream ingestion and background AI worker
         if stream_manager:
             stream_manager.stop_camera(camera.id)
 
-        db.delete(camera)
+        # 2. Snapshot camera name & location onto any associated incidents missing them
+        for inc in camera.incidents:
+            if not inc.camera_name:
+                inc.camera_name = camera.name
+            if not inc.camera_location:
+                inc.camera_location = camera.location
+
+        # 3. Soft delete: Mark camera as deleted and offline, preserving all historic alerts and incidents
+        camera.is_deleted = True
+        camera.enabled = False
+        camera.status = "OFFLINE"
+        camera.deleted_at = datetime.datetime.utcnow()
         db.commit()
-        return jsonify({"message": "Camera deleted"})
+
+        return jsonify({
+            "message": "Camera removed from live monitoring; incident history preserved",
+            "camera_id": camera.id
+        })
     finally:
         db.close()
 
@@ -276,7 +296,7 @@ def list_simulations():
 def test_camera(camera_id):
     db = SessionLocal()
     try:
-        camera = db.query(Camera).filter(Camera.id == camera_id).first()
+        camera = db.query(Camera).filter(Camera.id == camera_id, Camera.is_deleted == False).first()
         if not camera:
             return jsonify({"error": "Camera not found"}), 404
 
